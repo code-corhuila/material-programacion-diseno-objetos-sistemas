@@ -1,0 +1,2178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía Paso a Paso — Entrega 1: Diagrama de Clases y Código Base | Ingeniería de Sistemas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-color: #1e3c72;
+    --secondary-color: #2a5298;
+    --accent-color: #ff6b6b;
+    --light-bg: #f8f9fa;
+    --dark-text: #2c3e50;
+    --border-color: #e0e0e0;
+    --success-color: #27ae60;
+    --warning-color: #f39c12;
+    --info-color: #3498db;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    line-height: 1.6;
+    color: var(--dark-text);
+    background-color: #fff;
+}
+
+/* Header */
+.main-header {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: white;
+    padding: 0;
+}
+
+.top-bar {
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 20px 0;
+    text-align: center;
+}
+
+.brand-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.brand-name {
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    margin: 5px 0;
+}
+
+.main-nav {
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 15px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.main-nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0;
+}
+
+.main-nav a {
+    color: white;
+    text-decoration: none;
+    padding: 12px 20px;
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.3s;
+    border-bottom: 3px solid transparent;
+}
+
+.main-nav a:hover,
+.main-nav a.active {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-bottom-color: var(--accent-color);
+}
+
+/* Container */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Main Content */
+.main-content {
+    padding: 50px 0;
+}
+
+section {
+    margin-bottom: 40px;
+}
+
+h1 {
+    color: var(--primary-color);
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+h2 {
+    color: var(--secondary-color);
+    font-size: 2em;
+    margin-bottom: 25px;
+    border-left: 5px solid var(--accent-color);
+    padding-left: 15px;
+}
+
+h3 {
+    color: var(--primary-color);
+    font-size: 1.5em;
+    margin-top: 25px;
+    margin-bottom: 15px;
+}
+
+h4 {
+    color: var(--secondary-color);
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+/* Hero Section */
+.hero-section {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: white;
+    padding: 60px 40px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.hero-section h1 {
+    color: white;
+    margin-bottom: 20px;
+}
+
+.lead {
+    font-size: 1.2em;
+    line-height: 1.8;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Divider */
+.divider {
+    border: none;
+    border-top: 2px solid var(--border-color);
+    margin: 40px 0;
+}
+
+.divider-thick {
+    border: none;
+    border-top: 3px solid var(--accent-color);
+    margin: 50px 0;
+}
+
+/* Definition Box */
+.definition-box {
+    background-color: #e8f4f8;
+    border-left: 5px solid var(--secondary-color);
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 5px;
+    font-size: 1.05em;
+}
+
+/* Reflection Box */
+.reflection-box {
+    background-color: #fff3cd;
+    border-left: 5px solid var(--warning-color);
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 5px;
+}
+
+.reflection-box h4 {
+    color: #856404;
+    margin-bottom: 10px;
+}
+
+.reflection-box p {
+    color: #856404;
+    line-height: 1.7;
+}
+
+.reflection-box ul {
+    margin-left: 20px;
+    color: #856404;
+}
+
+/* Info Box */
+.info-box {
+    background-color: #d1ecf1;
+    border-left: 5px solid var(--info-color);
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 5px;
+}
+
+.info-box h4 {
+    color: #0c5460;
+    margin-bottom: 10px;
+}
+
+.info-box p, .info-box li {
+    color: #0c5460;
+    line-height: 1.7;
+}
+
+/* Success Box */
+.success-box {
+    background-color: #d4edda;
+    border-left: 5px solid var(--success-color);
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 5px;
+}
+
+.success-box h4 {
+    color: #155724;
+    margin-bottom: 10px;
+}
+
+.success-box p, .success-box li {
+    color: #155724;
+    line-height: 1.7;
+}
+
+/* Danger Box */
+.danger-box {
+    background-color: #f8d7da;
+    border-left: 5px solid var(--accent-color);
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 5px;
+}
+
+.danger-box h4 {
+    color: #721c24;
+    margin-bottom: 10px;
+}
+
+.danger-box p, .danger-box li {
+    color: #721c24;
+    line-height: 1.7;
+}
+
+/* Comparison Cards */
+.comparison-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin: 30px 0;
+}
+
+.card {
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.card h3,
+.card h4 {
+    color: var(--secondary-color);
+    margin-top: 0;
+}
+
+/* Step Cards */
+.step-card {
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 30px;
+    margin: 25px 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    border-left: 6px solid var(--secondary-color);
+    position: relative;
+}
+
+.step-card.highlight {
+    border-left-color: var(--accent-color);
+}
+
+.step-card.green {
+    border-left-color: var(--success-color);
+}
+
+.step-card.orange {
+    border-left-color: var(--warning-color);
+}
+
+.step-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 45px;
+    height: 45px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    border-radius: 50%;
+    font-size: 1.3em;
+    font-weight: 700;
+    margin-right: 15px;
+    flex-shrink: 0;
+}
+
+.step-card h3 {
+    display: flex;
+    align-items: center;
+    margin-top: 0;
+}
+
+/* Tables */
+.table-responsive {
+    overflow-x: auto;
+    margin: 30px 0;
+}
+
+.styled-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.styled-table thead tr {
+    background-color: var(--secondary-color);
+    color: white;
+    text-align: left;
+    font-weight: 500;
+}
+
+.styled-table th,
+.styled-table td {
+    padding: 15px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.styled-table tbody tr:hover {
+    background-color: var(--light-bg);
+}
+
+.styled-table tbody tr:nth-child(odd) {
+    background-color: #fafafa;
+}
+
+/* Code Blocks */
+pre {
+    background-color: #2d2d2d;
+    color: #f8f8f2;
+    padding: 20px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 20px 0;
+    font-family: 'Courier New', monospace;
+    font-size: 0.95em;
+    line-height: 1.5;
+}
+
+code {
+    font-family: 'Courier New', monospace;
+    background-color: #f4f4f4;
+    padding: 2px 6px;
+    border-radius: 3px;
+    color: var(--primary-color);
+}
+
+pre code {
+    background-color: transparent;
+    color: #f8f8f2;
+    padding: 0;
+}
+
+/* Diagram Box */
+.diagram-box {
+    background-color: #f0f8ff;
+    border: 2px solid var(--info-color);
+    padding: 30px;
+    margin: 30px 0;
+    border-radius: 8px;
+    text-align: center;
+    font-family: 'Courier New', monospace;
+    overflow-x: auto;
+}
+
+.diagram-box pre {
+    background-color: transparent;
+    color: var(--dark-text);
+    margin: 0;
+    padding: 0;
+    font-size: 0.9em;
+}
+
+/* Case Study Section */
+.case-study-section {
+    background-color: var(--light-bg);
+    padding: 40px;
+    border-radius: 10px;
+    margin: 40px 0;
+}
+
+.case-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.case-header h2 {
+    border-left: none;
+    padding-left: 0;
+    margin-bottom: 10px;
+}
+
+.case-header h3 {
+    color: var(--accent-color);
+    font-size: 1.3em;
+}
+
+/* Folder Tree */
+.folder-tree {
+    background-color: #1e1e1e;
+    color: #d4d4d4;
+    padding: 25px;
+    border-radius: 8px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.95em;
+    line-height: 1.8;
+    margin: 20px 0;
+}
+
+.folder-tree .folder {
+    color: #dcdcaa;
+}
+
+.folder-tree .file-java {
+    color: #ce9178;
+}
+
+.folder-tree .file-md {
+    color: #9cdcfe;
+}
+
+.folder-tree .file-img {
+    color: #6a9955;
+}
+
+/* Checklist */
+.checklist {
+    list-style: none;
+    margin-left: 0;
+    padding: 0;
+}
+
+.checklist li {
+    padding: 10px 15px;
+    margin: 5px 0;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    border-left: 4px solid var(--border-color);
+    transition: border-color 0.3s;
+}
+
+.checklist li:hover {
+    border-left-color: var(--success-color);
+}
+
+/* Footer */
+.main-footer {
+    background: var(--primary-color);
+    color: white;
+    text-align: center;
+    padding: 40px 0;
+    margin-top: 50px;
+}
+
+.main-footer p {
+    margin: 8px 0;
+    font-size: 0.95em;
+}
+
+.main-footer a {
+    color: #fff9e6;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.main-footer a:hover {
+    color: var(--accent-color);
+}
+
+/* Scroll to Top Button */
+#scrollTopBtn {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    padding: 15px 20px;
+    font-size: 18px;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    z-index: 99;
+    transition: background-color 0.3s;
+}
+
+#scrollTopBtn:hover {
+    background-color: var(--accent-color);
+}
+
+/* Lists */
+ul, ol {
+    margin: 15px 0;
+    margin-left: 30px;
+}
+
+li {
+    margin: 8px 0;
+    line-height: 1.7;
+}
+
+/* Links */
+a {
+    color: var(--secondary-color);
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+a:hover {
+    color: var(--accent-color);
+    text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    h1 { font-size: 1.8em; }
+    h2 { font-size: 1.5em; }
+    .hero-section { padding: 40px 20px; }
+    .main-nav ul { flex-direction: column; }
+    .main-nav a { padding: 10px 15px; font-size: 13px; }
+    .comparison-cards { grid-template-columns: 1fr; }
+    .case-study-section { padding: 20px; }
+    .step-card { padding: 20px; }
+}
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="top-bar">
+            <div class="container brand-container">
+                <img src="https://raw.githubusercontent.com/code-corhuila/material-mineria-datos/b3725d694125ab35294ddfe415a327bc1445d32c/01-week/01-session/LOGO%20CORHUILA%20BLANCO%20PNG%20(2).png" alt="Logo Corhuila" class="logo-corhuila" style="max-width: 120px; height: auto; margin-bottom: 15px;">
+                <h1 class="brand-name" style="color: white;">Guía Paso a Paso — Entrega 1</h1>
+                <p style="color: white;">Programación y Diseño Orientado a Objetos — Ingeniería de Sistemas</p>
+            </div>
+        </div>
+        <nav class="main-nav">
+            <div class="container">
+                <ul>
+                    <li><a href="#alcance">Alcance</a></li>
+                    <li><a href="#paso1">Paso 1: Entidades</a></li>
+                    <li><a href="#paso2">Paso 2: Atributos</a></li>
+                    <li><a href="#paso3">Paso 3: Relaciones</a></li>
+                    <li><a href="#paso4">Paso 4: Diagrama UML</a></li>
+                    <li><a href="#paso5">Paso 5: Proyecto Java</a></li>
+                    <li><a href="#paso6">Paso 6: Código Base</a></li>
+                    <li><a href="#paso7">Paso 7: README</a></li>
+                    <li><a href="#paso8">Paso 8: GitHub</a></li>
+                    <li><a href="#checklist">Checklist</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container main-content">
+
+        <!-- ==================== INTRODUCCIÓN ==================== -->
+        <section id="intro" class="hero-section">
+            <h1>Guía Paso a Paso — Entrega 1 (Segundo Corte)</h1>
+            <p class="lead">Esta guía te lleva de la mano desde la identificación de entidades hasta la entrega en GitHub. Usaremos como ejemplo el <strong>"Sistema de Gestión de Biblioteca Digital"</strong> para ilustrar cada paso, pero tú debes aplicarlo a <strong>tu proyecto asignado</strong>.</p>
+        </section>
+
+        <hr class="divider">
+
+        <!-- ==================== ALCANCE ==================== -->
+        <section id="alcance">
+            <h2>¿Qué se Entrega en el Segundo Corte?</h2>
+
+            <div class="definition-box">
+                <h4>📦 Entrega 1 — Fecha límite GitHub: 17 de Abril de 2026 | Sustentación: 21 de Abril de 2026</h4>
+                <ul>
+                    <li>✅ Diagrama de clases UML completo (mínimo 6 clases, relaciones, multiplicidad, clase abstracta e interfaces)</li>
+                    <li>✅ Estructura del proyecto Java creada y organizada por paquetes</li>
+                    <li>✅ Clases base implementadas con atributos, constructores, getters/setters y visibilidad correcta</li>
+                    <li>✅ README.md parcial: descripción del sistema, diagrama UML exportado y explicación de relaciones</li>
+                </ul>
+            </div>
+
+            <div class="reflection-box">
+                <h4>⚠️ Lo que NO se pide en esta entrega (es para el Tercer Corte)</h4>
+                <ul>
+                    <li>❌ Herencia y clase abstracta implementadas en código</li>
+                    <li>❌ Interfaces implementadas en código</li>
+                    <li>❌ Principios SOLID aplicados y justificados</li>
+                    <li>❌ Lógica de negocio funcional</li>
+                    <li>❌ Polimorfismo y composición en código</li>
+                    <li>❌ Clase <code>Main</code> funcional</li>
+                </ul>
+                <p>Estos puntos corresponden a la <strong>Entrega 2 — Tercer Corte (15 de Mayo / Sustentación: 19 de Mayo)</strong>.</p>
+            </div>
+
+            <div class="info-box">
+                <h4>📌 Ejemplo usado en esta guía</h4>
+                <p>Usaremos el proyecto del <strong>Grupo 1: Sistema de Gestión de Biblioteca Digital</strong> como ejemplo. Las entidades son: <code>RecursoDigital</code> (abstracta), <code>Libro</code>, <code>Revista</code>, <code>Audiolibro</code>, <code>Usuario</code>, <code>Prestamo</code>, <code>Reserva</code>, <code>Notificacion</code>.</p>
+                <p><strong>Tú debes adaptar cada paso a tu proyecto específico.</strong></p>
+            </div>
+        </section>
+
+        <hr class="divider-thick">
+
+        <!-- ==================== PASO 1 ==================== -->
+        <section id="paso1">
+            <div class="step-card">
+                <h3><span class="step-number">1</span> Identificar las Entidades del Dominio</h3>
+                
+                <p>Lo primero es leer la descripción de tu proyecto asignado y listar todas las entidades (clases) que necesitas. Tu proyecto ya tiene <strong>entidades mínimas</strong> definidas, pero puedes agregar más si lo consideras necesario.</p>
+
+                <h4>¿Cómo identificar entidades?</h4>
+                <ul>
+                    <li>Lee la descripción del proyecto y subraya los <strong>sustantivos</strong> importantes</li>
+                    <li>Cada sustantivo que represente un concepto del sistema es una posible clase</li>
+                    <li>Identifica cuál es la <strong>clase abstracta</strong> (la clase padre general)</li>
+                    <li>Identifica cuáles son las <strong>subclases</strong> (heredan de la abstracta)</li>
+                </ul>
+
+                <h4>Ejemplo: Sistema de Biblioteca Digital</h4>
+                <p>De la descripción: <em>"Sistema para gestionar el catálogo de una biblioteca digital: libros, revistas, audiolibros. Permite préstamos digitales, reservas, gestión de usuarios y notificaciones."</em></p>
+
+                <div class="table-responsive">
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>Entidad</th>
+                                <th>Tipo</th>
+                                <th>Justificación</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>RecursoDigital</strong></td>
+                                <td>Clase abstracta</td>
+                                <td>Concepto general que agrupa libros, revistas y audiolibros</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Libro</strong></td>
+                                <td>Clase concreta (hereda de RecursoDigital)</td>
+                                <td>Tipo específico de recurso con ISBN, autor, páginas</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Revista</strong></td>
+                                <td>Clase concreta (hereda de RecursoDigital)</td>
+                                <td>Tipo específico con número de edición, periodicidad</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Audiolibro</strong></td>
+                                <td>Clase concreta (hereda de RecursoDigital)</td>
+                                <td>Tipo específico con duración, narrador</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Usuario</strong></td>
+                                <td>Clase concreta</td>
+                                <td>Persona que usa el sistema: solicita préstamos, hace reservas</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Prestamo</strong></td>
+                                <td>Clase concreta</td>
+                                <td>Relación entre usuario y recurso: fecha, estado, devolución</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Reserva</strong></td>
+                                <td>Clase concreta</td>
+                                <td>Reserva anticipada de un recurso por un usuario</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Notificacion</strong></td>
+                                <td>Clase concreta</td>
+                                <td>Mensaje al usuario por vencimiento, disponibilidad, etc.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="success-box">
+                    <h4>✅ Resultado del Paso 1</h4>
+                    <p>Tienes una lista clara de al menos <strong>6 entidades</strong> (clases), sabes cuál es la <strong>clase abstracta</strong> y cuáles son sus <strong>subclases</strong>.</p>
+                </div>
+            </div>
+        </section>
+
+        <hr class="divider-thick">
+
+        <!-- ==================== PASO 2 ==================== -->
+        <section id="paso2">
+            <div class="step-card highlight">
+                <h3><span class="step-number">2</span> Definir Atributos y Métodos de Cada Clase</h3>
+                
+                <p>Para cada entidad, define sus <strong>atributos</strong> (datos que almacena) y sus <strong>métodos</strong> (acciones que puede realizar). Recuerda aplicar <strong>encapsulamiento</strong>: atributos privados (<code>-</code>) y métodos públicos (<code>+</code>).</p>
+
+                <div class="info-box">
+                    <h4>📌 Recuerda la notación de visibilidad UML</h4>
+                    <p><strong>+</strong> public | <strong>-</strong> private | <strong>#</strong> protected | <strong>~</strong> package</p>
+                    <p>Para la primera entrega, usa: <strong>atributos con <code>-</code> (private)</strong> y <strong>métodos con <code>+</code> (public)</strong>. Los atributos de la clase abstracta que las hijas necesitan pueden ser <strong><code>#</code> (protected)</strong>.</p>
+                </div>
+
+                <h4>Ejemplo: Clase abstracta RecursoDigital</h4>
+                <div class="diagram-box">
+                    <pre>
+┌──────────────────────────────────────────┐
+│     &lt;&lt;abstract&gt;&gt; RecursoDigital          │
+├──────────────────────────────────────────┤
+│ # id: int                                │
+│ # titulo: String                         │
+│ # anioPublicacion: int                   │
+│ # disponible: boolean = true             │
+├──────────────────────────────────────────┤
+│ + getId(): int                           │
+│ + getTitulo(): String                    │
+│ + getAnioPublicacion(): int              │
+│ + isDisponible(): boolean                │
+│ + setDisponible(disponible: boolean): void│
+│ + mostrarInformacion(): String {abstract}│
+└──────────────────────────────────────────┘
+                    </pre>
+                </div>
+
+                <h4>Ejemplo: Clase concreta Libro (hereda de RecursoDigital)</h4>
+                <div class="diagram-box">
+                    <pre>
+┌──────────────────────────────────────────┐
+│              Libro                        │
+├──────────────────────────────────────────┤
+│ - isbn: String                           │
+│ - autor: String                          │
+│ - numeroPaginas: int                     │
+│ - genero: String                         │
+├──────────────────────────────────────────┤
+│ + getIsbn(): String                      │
+│ + getAutor(): String                     │
+│ + getNumeroPaginas(): int                │
+│ + getGenero(): String                    │
+│ + setGenero(genero: String): void        │
+│ + mostrarInformacion(): String           │
+└──────────────────────────────────────────┘
+                    </pre>
+                </div>
+
+                <h4>Ejemplo: Clase Usuario</h4>
+                <div class="diagram-box">
+                    <pre>
+┌──────────────────────────────────────────┐
+│              Usuario                      │
+├──────────────────────────────────────────┤
+│ - id: int                                │
+│ - nombre: String                         │
+│ - email: String                          │
+│ - tipoUsuario: String                    │
+├──────────────────────────────────────────┤
+│ + getId(): int                           │
+│ + getNombre(): String                    │
+│ + getEmail(): String                     │
+│ + getTipoUsuario(): String               │
+│ + setEmail(email: String): void          │
+│ + setTipoUsuario(tipo: String): void     │
+└──────────────────────────────────────────┘
+                    </pre>
+                </div>
+
+                <h4>Ejemplo: Clase Prestamo</h4>
+                <div class="diagram-box">
+                    <pre>
+┌──────────────────────────────────────────┐
+│              Prestamo                     │
+├──────────────────────────────────────────┤
+│ - id: int                                │
+│ - fechaPrestamo: String                  │
+│ - fechaDevolucion: String                │
+│ - estado: String                         │
+│ - usuario: Usuario                       │
+│ - recurso: RecursoDigital                │
+├──────────────────────────────────────────┤
+│ + getId(): int                           │
+│ + getFechaPrestamo(): String             │
+│ + getFechaDevolucion(): String           │
+│ + getEstado(): String                    │
+│ + getUsuario(): Usuario                  │
+│ + getRecurso(): RecursoDigital           │
+│ + setEstado(estado: String): void        │
+│ + setFechaDevolucion(fecha: String): void│
+└──────────────────────────────────────────┘
+                    </pre>
+                </div>
+
+                <div class="reflection-box">
+                    <h4>💡 Tip: Piensa en los datos reales</h4>
+                    <p>Pregúntate: si este sistema existiera en la vida real, ¿qué datos necesitaría almacenar cada entidad? ¿Qué acciones básicas debería poder hacer?</p>
+                    <ul>
+                        <li>Un <strong>Libro</strong> tiene ISBN, autor, páginas → esos son atributos</li>
+                        <li>Un <strong>Préstamo</strong> tiene fecha inicio, fecha devolución, estado → atributos</li>
+                        <li>Cada atributo necesita su getter; los modificables necesitan setter</li>
+                    </ul>
+                </div>
+
+                <div class="success-box">
+                    <h4>✅ Resultado del Paso 2</h4>
+                    <p>Cada clase tiene definidos sus <strong>atributos</strong> (con tipo de dato y visibilidad) y sus <strong>métodos</strong> (getters, setters y métodos propios). La clase abstracta tiene al menos un <strong>método abstracto</strong>.</p>
+                </div>
+            </div>
+        </section>
+
+        <hr class="divider-thick">
+
+        <!-- ==================== PASO 3 ==================== -->
+        <section id="paso3">
+            <div class="step-card green">
+                <h3><span class="step-number">3</span> Identificar Relaciones y Multiplicidad</h3>
+                
+                <p>Ahora debes definir <strong>cómo se conectan</strong> las clases entre sí. Tu proyecto debe tener al menos <strong>3 tipos de relación diferentes</strong>.</p>
+
+                <h4>Tipos de Relación — Repaso Rápido</h4>
+                <div class="table-responsive">
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>Relación</th>
+                                <th>Símbolo UML</th>
+                                <th>Significado</th>
+                                <th>Pregunta Clave</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Herencia</strong></td>
+                                <td>───▷ (flecha hueca)</td>
+                                <td>"es un tipo de"</td>
+                                <td>¿Libro <em>es un tipo de</em> RecursoDigital? → SÍ</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Composición</strong></td>
+                                <td>◆─── (rombo lleno)</td>
+                                <td>"contiene y no puede existir sin"</td>
+                                <td>¿Un Préstamo existe sin un Usuario? → NO</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Agregación</strong></td>
+                                <td>◇─── (rombo vacío)</td>
+                                <td>"contiene pero puede existir sin"</td>
+                                <td>¿Un Usuario existe sin un Préstamo? → SÍ</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Asociación</strong></td>
+                                <td>───── (línea simple)</td>
+                                <td>"se relaciona con"</td>
+                                <td>¿Usuario se relaciona con Notificacion?</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Dependencia</strong></td>
+                                <td>- - -→ (línea punteada)</td>
+                                <td>"usa temporalmente"</td>
+                                <td>¿Una clase usa a otra solo en un método?</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h4>Ejemplo: Relaciones del Sistema de Biblioteca Digital</h4>
+                <div class="table-responsive">
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>Clase A</th>
+                                <th>Relación</th>
+                                <th>Clase B</th>
+                                <th>Multiplicidad</th>
+                                <th>Justificación</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Libro, Revista, Audiolibro</td>
+                                <td><strong>Herencia</strong> ───▷</td>
+                                <td>RecursoDigital</td>
+                                <td>—</td>
+                                <td>Libro "es un" RecursoDigital</td>
+                            </tr>
+                            <tr>
+                                <td>Prestamo</td>
+                                <td><strong>Composición</strong> ◆───</td>
+                                <td>Usuario</td>
+                                <td>1 Usuario ←→ 0..* Prestamos</td>
+                                <td>Un préstamo no existe sin un usuario. Un usuario puede tener muchos préstamos</td>
+                            </tr>
+                            <tr>
+                                <td>Prestamo</td>
+                                <td><strong>Composición</strong> ◆───</td>
+                                <td>RecursoDigital</td>
+                                <td>1 Recurso ←→ 0..* Prestamos</td>
+                                <td>Un préstamo siempre tiene un recurso asociado</td>
+                            </tr>
+                            <tr>
+                                <td>Reserva</td>
+                                <td><strong>Composición</strong> ◆───</td>
+                                <td>Usuario</td>
+                                <td>1 Usuario ←→ 0..* Reservas</td>
+                                <td>Una reserva necesita un usuario</td>
+                            </tr>
+                            <tr>
+                                <td>Reserva</td>
+                                <td><strong>Composición</strong> ◆───</td>
+                                <td>RecursoDigital</td>
+                                <td>1 Recurso ←→ 0..* Reservas</td>
+                                <td>Una reserva necesita un recurso</td>
+                            </tr>
+                            <tr>
+                                <td>Notificacion</td>
+                                <td><strong>Asociación</strong> ─────</td>
+                                <td>Usuario</td>
+                                <td>1 Usuario ←→ 0..* Notificaciones</td>
+                                <td>Un usuario recibe notificaciones</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="info-box">
+                    <h4>📌 Cómo definir la Multiplicidad</h4>
+                    <p>Hazte estas preguntas para cada relación:</p>
+                    <ul>
+                        <li><strong>¿Cuántos B puede tener un A?</strong> → Eso va al lado de B</li>
+                        <li><strong>¿Cuántos A puede tener un B?</strong> → Eso va al lado de A</li>
+                        <li>Ejemplo: Un Usuario puede tener <strong>0 o muchos</strong> Préstamos (0..*). Un Préstamo pertenece a <strong>exactamente 1</strong> Usuario (1).</li>
+                    </ul>
+                </div>
+
+                <div class="success-box">
+                    <h4>✅ Resultado del Paso 3</h4>
+                    <p>Tienes una tabla clara con todas las <strong>relaciones</strong> entre tus clases, el <strong>tipo de relación</strong> y la <strong>multiplicidad</strong>. Usas al menos <strong>3 tipos de relación</strong> diferentes (herencia, composición, asociación, etc.).</p>
+                </div>
+            </div>
+        </section>
+
+        <hr class="divider-thick">
+
+        <!-- ==================== PASO 4 ==================== -->
+        <section id="paso4">
+            <div class="step-card orange">
+                <h3><span class="step-number">4</span> Dibujar el Diagrama de Clases UML</h3>
+                
+                <p>Ahora que tienes entidades, atributos, métodos y relaciones definidos, es hora de dibujar el diagrama UML completo usando una herramienta digital.</p>
+
+                <h4>Herramientas Recomendadas (Gratuitas)</h4>
+                <div class="comparison-cards">
+                    <div class="card">
+                        <h4>🎨 draw.io (diagrams.net)</h4>
+                        <p><strong>Recomendada.</strong> Gratuita, en línea, fácil de usar. Exporta a .png y .svg.</p>
+                        <p><a href="https://app.diagrams.net/" target="_blank">→ Abrir draw.io</a></p>
+                    </div>
+                    <div class="card">
+                        <h4>📐 Lucidchart</h4>
+                        <p>Profesional con plan gratuito limitado. Buena para UML.</p>
+                        <p><a href="https://www.lucidchart.com/" target="_blank">→ Abrir Lucidchart</a></p>
+                    </div>
+                    <div class="card">
+                        <h4>⭐ StarUML</h4>
+                        <p>Especializada en UML. Descarga gratuita para evaluación.</p>
+                        <p><a href="https://staruml.io/" target="_blank">→ Descargar StarUML</a></p>
+                    </div>
+                </div>
+
+                <h4>Cómo usar draw.io para el diagrama</h4>
+                <ol>
+                    <li>Abre <a href="https://app.diagrams.net/" target="_blank">app.diagrams.net</a></li>
+                    <li>Selecciona <strong>"Create New Diagram"</strong> → elige <strong>"UML"</strong> como categoría</li>
+                    <li>En la barra lateral izquierda, busca la sección <strong>UML</strong></li>
+                    <li>Arrastra el bloque <strong>"Class"</strong> al lienzo por cada entidad</li>
+                    <li>Escribe nombre de clase, atributos y métodos con su visibilidad</li>
+                    <li>Usa los conectores UML para las relaciones (herencia, composición, etc.)</li>
+                    <li>Añade la multiplicidad escribiendo sobre las líneas de relación</li>
+                    <li><strong>Exportar:</strong> File → Export as → PNG o SVG</li>
+                </ol>
+
+                <h4>Ejemplo Visual del Diagrama Completo</h4>
+                <div class="diagram-box">
+                    <pre>
+ ╔══════════════════════════════════════════════════════════════════════════════════════════╗
+ ║                              JERARQUÍA DE HERENCIA                                     ║
+ ╚══════════════════════════════════════════════════════════════════════════════════════════╝
+
+                       ┌──────────────────────────────────────┐
+                       │    &lt;&lt;abstract&gt;&gt; RecursoDigital       │
+                       ├──────────────────────────────────────┤
+                       │ # id: int                            │
+                       │ # titulo: String                     │
+                       │ # anioPublicacion: int               │
+                       │ # disponible: boolean                │
+                       ├──────────────────────────────────────┤
+                       │ + getId(): int                       │
+                       │ + getTitulo(): String                │
+                       │ + isDisponible(): boolean            │
+                       │ + mostrarInformacion(): String {abs} │
+                       └──────────────┬───────────────────────┘
+                                      │
+                                      │ herencia
+                                      │
+                 ┌────────────────────┼─────────────────────┐
+                 │                    │                     │
+                 ▽                    ▽                     ▽
+  ┌──────────────────────┐ ┌──────────────────────┐ ┌──────────────────────┐
+  │        Libro         │ │       Revista        │ │     Audiolibro       │
+  ├──────────────────────┤ ├──────────────────────┤ ├──────────────────────┤
+  │ - isbn: String       │ │ - edicion: int       │ │ - duracion: int      │
+  │ - autor: String      │ │ - periodicidad: Str  │ │ - narrador: String   │
+  │ - paginas: int       │ │ - editorial: String  │ │ - formato: String    │
+  │ - genero: String     │ ├──────────────────────┤ ├──────────────────────┤
+  ├──────────────────────┤ │ + getters/setters()  │ │ + getters/setters()  │
+  │ + getters/setters()  │ │ + mostrarInfo(): Str │ │ + mostrarInfo(): Str │
+  │ + mostrarInfo(): Str │ └──────────────────────┘ └──────────────────────┘
+  └──────────────────────┘
+
+
+ ╔══════════════════════════════════════════════════════════════════════════════════════════╗
+ ║                          RELACIONES DE COMPOSICIÓN Y ASOCIACIÓN                        ║
+ ╚══════════════════════════════════════════════════════════════════════════════════════════╝
+
+  ┌──────────────────────┐                             ┌──────────────────────┐
+  │       Usuario        │         composición         │      Prestamo        │
+  ├──────────────────────┤  (1)                (0..*)  ├──────────────────────┤
+  │ - id: int            │◆────────────────────────────│ - id: int            │
+  │ - nombre: String     │                             │ - fechaPrest: String │
+  │ - email: String      │                             │ - fechaDevol: String │
+  │ - tipoUsuario: String│                             │ - estado: String     │
+  ├──────────────────────┤                             │ - usuario: Usuario   │
+  │ + getters/setters()  │                             │ - recurso: Recurso   │
+  └──────────┬───────────┘                             ├──────────────────────┤
+             │                                         │ + getters/setters()  │
+             │                                         └──────────┬───────────┘
+             │  composición                                       │
+             │  (1)                (0..*)                          │ composición
+             │                                                    │ (0..*)           (1)
+             │         ┌──────────────────────┐                   │
+             │         │       Reserva        │                   │
+             │         ├──────────────────────┤                   │
+             ◆─────────│ - id: int            │                   │
+                       │ - fechaReserva: Str  │                   │
+                       │ - estado: String     │    ┌──────────────────────────────────┐
+                       │ - usuario: Usuario   │    │                                  │
+                       │ - recurso: Recurso   │    │  RecursoDigital (clase abstracta)│
+                       ├──────────────────────┤    │                                  │
+                       │ + getters/setters()  │    │  Tanto Prestamo como Reserva     │
+                       └──────────────────────┘    │  tienen composición (◆) con      │
+                                                   │  RecursoDigital (1) ←──── (0..*) │
+                                                   └──────────────────────────────────┘
+
+  ┌──────────────────────┐         asociación          ┌──────────────────────┐
+  │    Notificacion      │  (0..*)             (1)     │       Usuario        │
+  ├──────────────────────┤                             │    (ya definido      │
+  │ - id: int            │─────────────────────────────│     arriba)          │
+  │ - mensaje: String    │                             └──────────────────────┘
+  │ - fecha: String      │
+  │ - tipo: String       │
+  │ - leida: boolean     │
+  │ - usuario: Usuario   │
+  ├──────────────────────┤
+  │ + getters/setters()  │
+  └──────────────────────┘
+
+
+ ╔══════════════════════════════════════════════════════════════════════════════════════════╗
+ ║                              LEYENDA DE RELACIONES                                     ║
+ ╠══════════════════════════════════════════════════════════════════════════════════════════╣
+ ║                                                                                        ║
+ ║   ───▽     Herencia (la flecha va de la hija → padre)                                  ║
+ ║   ◆────    Composición (rombo lleno: "no puede existir sin")                           ║
+ ║   ◇────    Agregación  (rombo vacío: "puede existir sin")                              ║
+ ║   ─────    Asociación  (línea simple: "se relaciona con")                              ║
+ ║   - - -→   Dependencia  (línea punteada: "usa temporalmente")                          ║
+ ║                                                                                        ║
+ ║   (1)       Exactamente uno       (0..*)  Cero o muchos                                ║
+ ║   (0..1)    Cero o uno            (1..*)  Uno o muchos                                 ║
+ ║                                                                                        ║
+ ╚══════════════════════════════════════════════════════════════════════════════════════════╝
+                    </pre>
+                </div>
+
+                <div class="danger-box">
+                    <h4>🚨 Errores Comunes en el Diagrama</h4>
+                    <ul>
+                        <li>Olvidar la <strong>multiplicidad</strong> en las relaciones</li>
+                        <li>No marcar la clase <strong>abstracta</strong> con <code>&lt;&lt;abstract&gt;&gt;</code></li>
+                        <li>Usar la flecha de herencia al revés (la flecha va de la hija hacia el padre)</li>
+                        <li>No poner la <strong>visibilidad</strong> (+ - #) en atributos y métodos</li>
+                        <li>No incluir los <strong>tipos de dato</strong> en atributos y retorno de métodos</li>
+                    </ul>
+                </div>
+
+                <div class="success-box">
+                    <h4>✅ Resultado del Paso 4</h4>
+                    <p>Tienes tu diagrama UML completo dibujado en draw.io (u otra herramienta) y <strong>exportado como imagen .png o .svg</strong> listo para subir al repositorio.</p>
+                </div>
+            </div>
+        </section>
+
+        <hr class="divider-thick">
+
+        <!-- ==================== PASO 5 ==================== -->
+        <section id="paso5">
+            <div class="step-card">
+                <h3><span class="step-number">5</span> Crear la Estructura del Proyecto Java</h3>
+                
+                <p>Crea el proyecto Java con una estructura organizada por <strong>paquetes</strong>. Esto demuestra orden y facilita la implementación posterior.</p>
+
+                <h4>Estructura de Carpetas Recomendada</h4>
+                <div class="folder-tree">
+                    <span class="folder">📁 biblioteca-digital-grupo-1/</span><br>
+                    ├── <span class="file-md">📄 README.md</span><br>
+                    ├── <span class="folder">📁 diagrams/</span><br>
+                    │&nbsp;&nbsp;&nbsp;├── <span class="file-img">🖼️ diagrama-clases.png</span><br>
+                    │&nbsp;&nbsp;&nbsp;└── <span class="file-img">🖼️ diagrama-clases.svg</span><br>
+                    └── <span class="folder">📁 src/</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;└── <span class="folder">📁 com/</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── <span class="folder">📁 biblioteca/</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── <span class="folder">📁 model/</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── <span class="file-java">☕ RecursoDigital.java</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── <span class="file-java">☕ Libro.java</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── <span class="file-java">☕ Revista.java</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── <span class="file-java">☕ Audiolibro.java</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── <span class="file-java">☕ Usuario.java</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── <span class="file-java">☕ Prestamo.java</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── <span class="file-java">☕ Reserva.java</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└── <span class="file-java">☕ Notificacion.java</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── <span class="file-java">☕ Main.java</span> <em>(vacío por ahora)</em>
+                </div>
+
+                <div class="info-box">
+                    <h4>📌 ¿Qué es un paquete en Java?</h4>
+                    <p>Un paquete (<code>package</code>) es una forma de organizar las clases relacionadas. La estructura de carpetas refleja la jerarquía de paquetes. Por ejemplo, la carpeta <code>com/biblioteca/model/</code> corresponde al paquete <code>com.biblioteca.model</code>.</p>
+                </div>
+
+                <h4>Cómo crear la estructura</h4>
+                <p>Si usas un IDE como <strong>IntelliJ IDEA</strong> o <strong>VS Code con extensiones de Java</strong>:</p>
+                <ol>
+                    <li>Crea un nuevo proyecto Java</li>
+                    <li>Dentro de <code>src</code>, crea los paquetes: <code>com.biblioteca.model</code></li>
+                    <li>Crea cada archivo .java dentro del paquete correspondiente</li>
+                </ol>
+
+                <p>Si prefieres hacerlo <strong>manualmente desde la terminal</strong>:</p>
+                <pre><code># Crear la estructura de carpetas
+mkdir -p biblioteca-digital-grupo-1/diagrams
+mkdir -p biblioteca-digital-grupo-1/src/com/biblioteca/model
+
+# Crear los archivos vacíos
+cd biblioteca-digital-grupo-1/src/com/biblioteca/model
+touch RecursoDigital.java Libro.java Revista.java Audiolibro.java
+touch Usuario.java Prestamo.java Reserva.java Notificacion.java
+
+cd ../
+touch Main.java</code></pre>
+
+                <div class="success-box">
+                    <h4>✅ Resultado del Paso 5</h4>
+                    <p>Tienes la <strong>estructura del proyecto</strong> creada con carpetas organizadas por paquetes, con un archivo .java por cada clase del diagrama UML.</p>
+                </div>
+            </div>
+        </section>
+
+        <hr class="divider-thick">
+
+        <!-- ==================== PASO 6 ==================== -->
+        <section id="paso6" class="case-study-section">
+            <div class="case-header">
+                <h2>Paso 6 — Implementar las Clases Base en Java</h2>
+                <h3>Traducir el diagrama UML a código con atributos, constructores, getters y setters</h3>
+            </div>
+
+            <div class="info-box">
+                <h4>📌 ¿Qué implementar en esta entrega?</h4>
+                <p>Para la <strong>Entrega 1</strong> debes crear las clases con:</p>
+                <ul>
+                    <li>Declaración de la clase con el paquete correcto</li>
+                    <li>Atributos <strong>privados</strong> (o protegidos en la clase abstracta)</li>
+                    <li><strong>Constructor</strong> que inicialice todos los atributos</li>
+                    <li><strong>Getters y Setters</strong> según corresponda</li>
+                    <li>Método <code>toString()</code> para representación textual</li>
+                </ul>
+            </div>
+
+            <!-- Clase Abstracta -->
+            <h3>6.1 — Clase Abstracta: RecursoDigital.java</h3>
+            <p>Esta es la clase padre de la cual heredarán Libro, Revista y Audiolibro.</p>
+            <pre><code>package com.biblioteca.model;
+
+/**
+ * Clase abstracta que representa un recurso digital genérico
+ * en la biblioteca.
+ */
+public abstract class RecursoDigital {
+
+    // Atributos protegidos para que las subclases puedan acceder
+    protected int id;
+    protected String titulo;
+    protected int anioPublicacion;
+    protected boolean disponible;
+
+    // Constructor
+    public RecursoDigital(int id, String titulo, int anioPublicacion) {
+        this.id = id;
+        this.titulo = titulo;
+        this.anioPublicacion = anioPublicacion;
+        this.disponible = true;
+    }
+
+    // Getters
+    public int getId() {
+        return id;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public int getAnioPublicacion() {
+        return anioPublicacion;
+    }
+
+    public boolean isDisponible() {
+        return disponible;
+    }
+
+    // Setters
+    public void setDisponible(boolean disponible) {
+        this.disponible = disponible;
+    }
+
+    // Método abstracto: cada subclase lo implementa de forma diferente
+    public abstract String mostrarInformacion();
+
+    @Override
+    public String toString() {
+        return "RecursoDigital{id=" + id +
+               ", titulo='" + titulo + '\'' +
+               ", anio=" + anioPublicacion +
+               ", disponible=" + disponible + '}';
+    }
+}</code></pre>
+
+            <div class="reflection-box">
+                <h4>💡 ¿Por qué es <code>abstract</code>?</h4>
+                <p>Porque <strong>no tiene sentido crear un "RecursoDigital" genérico</strong>. Siempre será un Libro, una Revista o un Audiolibro. La clase abstracta define lo común, y cada subclase agrega lo específico.</p>
+            </div>
+
+            <!-- Clase Concreta: Libro -->
+            <hr class="divider">
+            <h3>6.2 — Clase Concreta: Libro.java</h3>
+            <p>Hereda de RecursoDigital y agrega atributos propios del libro.</p>
+            <pre><code>package com.biblioteca.model;
+
+public class Libro extends RecursoDigital {
+
+    private String isbn;
+    private String autor;
+    private int numeroPaginas;
+    private String genero;
+
+    // Constructor: llama al constructor del padre con super()
+    public Libro(int id, String titulo, int anioPublicacion,
+                 String isbn, String autor, int numeroPaginas, String genero) {
+        super(id, titulo, anioPublicacion);
+        this.isbn = isbn;
+        this.autor = autor;
+        this.numeroPaginas = numeroPaginas;
+        this.genero = genero;
+    }
+
+    // Getters
+    public String getIsbn() {
+        return isbn;
+    }
+
+    public String getAutor() {
+        return autor;
+    }
+
+    public int getNumeroPaginas() {
+        return numeroPaginas;
+    }
+
+    public String getGenero() {
+        return genero;
+    }
+
+    // Setters
+    public void setGenero(String genero) {
+        this.genero = genero;
+    }
+
+    // Implementación del método abstracto del padre
+    @Override
+    public String mostrarInformacion() {
+        return "Libro: " + titulo + " | Autor: " + autor +
+               " | ISBN: " + isbn + " | Páginas: " + numeroPaginas +
+               " | Género: " + genero +
+               " | Año: " + anioPublicacion +
+               " | Disponible: " + (disponible ? "Sí" : "No");
+    }
+
+    @Override
+    public String toString() {
+        return "Libro{isbn='" + isbn + "', autor='" + autor +
+               "', titulo='" + titulo + "', paginas=" + numeroPaginas + '}';
+    }
+}</code></pre>
+
+            <!-- Clase Concreta: Revista -->
+            <hr class="divider">
+            <h3>6.3 — Clase Concreta: Revista.java</h3>
+            <pre><code>package com.biblioteca.model;
+
+public class Revista extends RecursoDigital {
+
+    private int numeroEdicion;
+    private String periodicidad;
+    private String editorial;
+
+    public Revista(int id, String titulo, int anioPublicacion,
+                   int numeroEdicion, String periodicidad, String editorial) {
+        super(id, titulo, anioPublicacion);
+        this.numeroEdicion = numeroEdicion;
+        this.periodicidad = periodicidad;
+        this.editorial = editorial;
+    }
+
+    // Getters
+    public int getNumeroEdicion() {
+        return numeroEdicion;
+    }
+
+    public String getPeriodicidad() {
+        return periodicidad;
+    }
+
+    public String getEditorial() {
+        return editorial;
+    }
+
+    // Implementación del método abstracto
+    @Override
+    public String mostrarInformacion() {
+        return "Revista: " + titulo + " | Edición #" + numeroEdicion +
+               " | Periodicidad: " + periodicidad +
+               " | Editorial: " + editorial +
+               " | Año: " + anioPublicacion +
+               " | Disponible: " + (disponible ? "Sí" : "No");
+    }
+
+    @Override
+    public String toString() {
+        return "Revista{titulo='" + titulo + "', edicion=" + numeroEdicion +
+               ", editorial='" + editorial + "'}";
+    }
+}</code></pre>
+
+            <!-- Clase Concreta: Audiolibro -->
+            <hr class="divider">
+            <h3>6.4 — Clase Concreta: Audiolibro.java</h3>
+            <pre><code>package com.biblioteca.model;
+
+public class Audiolibro extends RecursoDigital {
+
+    private int duracionMinutos;
+    private String narrador;
+    private String formato;
+
+    public Audiolibro(int id, String titulo, int anioPublicacion,
+                      int duracionMinutos, String narrador, String formato) {
+        super(id, titulo, anioPublicacion);
+        this.duracionMinutos = duracionMinutos;
+        this.narrador = narrador;
+        this.formato = formato;
+    }
+
+    // Getters
+    public int getDuracionMinutos() {
+        return duracionMinutos;
+    }
+
+    public String getNarrador() {
+        return narrador;
+    }
+
+    public String getFormato() {
+        return formato;
+    }
+
+    // Implementación del método abstracto
+    @Override
+    public String mostrarInformacion() {
+        return "Audiolibro: " + titulo + " | Narrador: " + narrador +
+               " | Duración: " + duracionMinutos + " min" +
+               " | Formato: " + formato +
+               " | Año: " + anioPublicacion +
+               " | Disponible: " + (disponible ? "Sí" : "No");
+    }
+
+    @Override
+    public String toString() {
+        return "Audiolibro{titulo='" + titulo + "', narrador='" + narrador +
+               "', duracion=" + duracionMinutos + " min}";
+    }
+}</code></pre>
+
+            <!-- Clase: Usuario -->
+            <hr class="divider">
+            <h3>6.5 — Clase: Usuario.java</h3>
+            <pre><code>package com.biblioteca.model;
+
+public class Usuario {
+
+    private int id;
+    private String nombre;
+    private String email;
+    private String tipoUsuario;
+
+    public Usuario(int id, String nombre, String email, String tipoUsuario) {
+        this.id = id;
+        this.nombre = nombre;
+        this.email = email;
+        this.tipoUsuario = tipoUsuario;
+    }
+
+    // Getters
+    public int getId() {
+        return id;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getTipoUsuario() {
+        return tipoUsuario;
+    }
+
+    // Setters
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setTipoUsuario(String tipoUsuario) {
+        this.tipoUsuario = tipoUsuario;
+    }
+
+    @Override
+    public String toString() {
+        return "Usuario{id=" + id + ", nombre='" + nombre +
+               "', email='" + email + "', tipo='" + tipoUsuario + "'}";
+    }
+}</code></pre>
+
+            <!-- Clase: Prestamo -->
+            <hr class="divider">
+            <h3>6.6 — Clase: Prestamo.java</h3>
+            <p>Observe cómo los atributos <code>usuario</code> y <code>recurso</code> representan la <strong>composición</strong> del diagrama UML.</p>
+            <pre><code>package com.biblioteca.model;
+
+public class Prestamo {
+
+    private int id;
+    private String fechaPrestamo;
+    private String fechaDevolucion;
+    private String estado;
+    private Usuario usuario;              // Composición: un Préstamo TIENE un Usuario
+    private RecursoDigital recurso;       // Composición: un Préstamo TIENE un Recurso
+
+    public Prestamo(int id, String fechaPrestamo, String fechaDevolucion,
+                    String estado, Usuario usuario, RecursoDigital recurso) {
+        this.id = id;
+        this.fechaPrestamo = fechaPrestamo;
+        this.fechaDevolucion = fechaDevolucion;
+        this.estado = estado;
+        this.usuario = usuario;
+        this.recurso = recurso;
+    }
+
+    // Getters
+    public int getId() {
+        return id;
+    }
+
+    public String getFechaPrestamo() {
+        return fechaPrestamo;
+    }
+
+    public String getFechaDevolucion() {
+        return fechaDevolucion;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public RecursoDigital getRecurso() {
+        return recurso;
+    }
+
+    // Setters
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public void setFechaDevolucion(String fechaDevolucion) {
+        this.fechaDevolucion = fechaDevolucion;
+    }
+
+    @Override
+    public String toString() {
+        return "Prestamo{id=" + id + ", usuario=" + usuario.getNombre() +
+               ", recurso=" + recurso.getTitulo() +
+               ", estado='" + estado + "', fecha=" + fechaPrestamo + "}";
+    }
+}</code></pre>
+
+            <div class="info-box">
+                <h4>📌 Así se traduce una relación de composición a código</h4>
+                <p>En el diagrama UML: <code>Prestamo ◆─── Usuario</code></p>
+                <p>En Java: <code>private Usuario usuario;</code> (atributo de tipo Usuario dentro de Prestamo)</p>
+                <p>El constructor recibe un objeto <code>Usuario</code> ya creado y lo almacena.</p>
+            </div>
+
+            <!-- Clase: Reserva -->
+            <hr class="divider">
+            <h3>6.7 — Clase: Reserva.java</h3>
+            <pre><code>package com.biblioteca.model;
+
+public class Reserva {
+
+    private int id;
+    private String fechaReserva;
+    private String estado;
+    private Usuario usuario;
+    private RecursoDigital recurso;
+
+    public Reserva(int id, String fechaReserva, String estado,
+                   Usuario usuario, RecursoDigital recurso) {
+        this.id = id;
+        this.fechaReserva = fechaReserva;
+        this.estado = estado;
+        this.usuario = usuario;
+        this.recurso = recurso;
+    }
+
+    // Getters
+    public int getId() {
+        return id;
+    }
+
+    public String getFechaReserva() {
+        return fechaReserva;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public RecursoDigital getRecurso() {
+        return recurso;
+    }
+
+    // Setters
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    @Override
+    public String toString() {
+        return "Reserva{id=" + id + ", usuario=" + usuario.getNombre() +
+               ", recurso=" + recurso.getTitulo() +
+               ", estado='" + estado + "', fecha=" + fechaReserva + "}";
+    }
+}</code></pre>
+
+            <!-- Clase: Notificacion -->
+            <hr class="divider">
+            <h3>6.8 — Clase: Notificacion.java</h3>
+            <pre><code>package com.biblioteca.model;
+
+public class Notificacion {
+
+    private int id;
+    private String mensaje;
+    private String fecha;
+    private String tipo;
+    private boolean leida;
+    private Usuario usuario;              // Asociación: una Notificación va a un Usuario
+
+    public Notificacion(int id, String mensaje, String fecha,
+                        String tipo, Usuario usuario) {
+        this.id = id;
+        this.mensaje = mensaje;
+        this.fecha = fecha;
+        this.tipo = tipo;
+        this.leida = false;
+        this.usuario = usuario;
+    }
+
+    // Getters
+    public int getId() {
+        return id;
+    }
+
+    public String getMensaje() {
+        return mensaje;
+    }
+
+    public String getFecha() {
+        return fecha;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public boolean isLeida() {
+        return leida;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    // Setters
+    public void setLeida(boolean leida) {
+        this.leida = leida;
+    }
+
+    @Override
+    public String toString() {
+        return "Notificacion{id=" + id + ", tipo='" + tipo +
+               "', mensaje='" + mensaje + "', leida=" + leida +
+               ", usuario=" + usuario.getNombre() + "}";
+    }
+}</code></pre>
+
+            <!-- Main vacío -->
+            <hr class="divider">
+            <h3>6.9 — Main.java (Estructura Base)</h3>
+            <p>Para la primera entrega, el <code>Main</code> puede estar vacío o con una instancia básica de prueba. La lógica completa se implementa en la Entrega 2.</p>
+            <pre><code>package com.biblioteca;
+
+import com.biblioteca.model.*;
+
+public class Main {
+
+    public static void main(String[] args) {
+        System.out.println("=== Sistema de Gestión de Biblioteca Digital ===");
+        System.out.println("Estructura base creada correctamente.");
+        System.out.println("La lógica de negocio se implementará en la Entrega 2.");
+    }
+}</code></pre>
+
+            <div class="success-box">
+                <h4>✅ Resultado del Paso 6</h4>
+                <p>Todas las <strong>clases base</strong> están implementadas en Java con atributos privados/protegidos, constructores, getters, setters y toString(). El código <strong>compila sin errores</strong>.</p>
+            </div>
+        </section>
+
+        <hr class="divider-thick">
+
+        <!-- ==================== PASO 7 ==================== -->
+        <section id="paso7">
+            <div class="step-card highlight">
+                <h3><span class="step-number">7</span> Escribir el README.md Parcial</h3>
+                
+                <p>El README.md debe contener la documentación parcial del proyecto. Copia la siguiente plantilla y adáptala a tu proyecto.</p>
+
+                <h4>Plantilla del README.md para la Entrega 1</h4>
+                <pre><code># 📚 Sistema de Gestión de Biblioteca Digital
+
+## 📖 Descripción del Sistema
+
+Sistema para gestionar el catálogo de una biblioteca digital: libros, 
+revistas, audiolibros. Permite préstamos digitales, reservas, gestión 
+de usuarios con distintos roles y notificaciones de vencimiento.
+
+## 👥 Integrantes
+
+| Nombre | Correo |
+|--------|--------|
+| Nombre Estudiante 1 | correo1@corhuila.edu.co |
+| Nombre Estudiante 2 | correo2@corhuila.edu.co |
+
+## 📊 Diagrama de Clases UML
+
+![Diagrama de Clases](diagrams/diagrama-clases.png)
+
+## 🏗️ Estructura del Proyecto
+
+```
+src/
+└── com/
+    └── biblioteca/
+        ├── model/
+        │   ├── RecursoDigital.java  (Clase abstracta)
+        │   ├── Libro.java
+        │   ├── Revista.java
+        │   ├── Audiolibro.java
+        │   ├── Usuario.java
+        │   ├── Prestamo.java
+        │   ├── Reserva.java
+        │   └── Notificacion.java
+        └── Main.java
+```
+
+## 🔗 Explicación de Relaciones
+
+### Herencia (──▷)
+- **Libro**, **Revista** y **Audiolibro** heredan de **RecursoDigital** 
+  (clase abstracta).
+- Justificación: Los tres son tipos específicos de recurso digital que 
+  comparten atributos comunes (id, título, año, disponibilidad) pero 
+  difieren en sus atributos propios.
+
+### Composición (◆───)
+- **Prestamo** contiene un **Usuario** y un **RecursoDigital**.
+  - Multiplicidad: 1 Usuario → 0..* Prestamos
+- **Reserva** contiene un **Usuario** y un **RecursoDigital**.
+  - Multiplicidad: 1 Usuario → 0..* Reservas
+- Justificación: Un préstamo o reserva no tiene sentido sin un usuario 
+  y un recurso asociado.
+
+### Asociación (─────)
+- **Notificacion** se asocia con **Usuario**.
+  - Multiplicidad: 1 Usuario → 0..* Notificaciones
+- Justificación: Las notificaciones se envían a un usuario, pero el 
+  usuario puede existir sin notificaciones.
+
+## 📝 Clases Implementadas
+
+| Clase | Tipo | Atributos | Descripción |
+|-------|------|-----------|-------------|
+| RecursoDigital | Abstracta | id, titulo, anioPublicacion, disponible | Clase padre de todos los recursos |
+| Libro | Concreta | isbn, autor, numeroPaginas, genero | Recurso tipo libro |
+| Revista | Concreta | numeroEdicion, periodicidad, editorial | Recurso tipo revista |
+| Audiolibro | Concreta | duracionMinutos, narrador, formato | Recurso tipo audiolibro |
+| Usuario | Concreta | id, nombre, email, tipoUsuario | Usuario del sistema |
+| Prestamo | Concreta | id, fechas, estado, usuario, recurso | Préstamo de un recurso |
+| Reserva | Concreta | id, fechaReserva, estado, usuario, recurso | Reserva de un recurso |
+| Notificacion | Concreta | id, mensaje, fecha, tipo, leida, usuario | Notificación al usuario |
+
+---
+*Proyecto de Programación y Diseño Orientado a Objetos — Corhuila 2026*</code></pre>
+
+                <div class="reflection-box">
+                    <h4>💡 Tips para un buen README</h4>
+                    <ul>
+                        <li>La imagen del diagrama se referencia así: <code>![Texto](diagrams/diagrama-clases.png)</code></li>
+                        <li>Asegúrate de que la imagen esté en la carpeta <code>/diagrams</code> del repositorio</li>
+                        <li>Explica <strong>cada tipo de relación</strong> con su justificación</li>
+                        <li>Usa tablas Markdown para organizar la información</li>
+                    </ul>
+                </div>
+
+                <div class="success-box">
+                    <h4>✅ Resultado del Paso 7</h4>
+                    <p>Tienes un <strong>README.md</strong> completo con descripción, integrantes, diagrama UML, estructura del proyecto y explicación de relaciones.</p>
+                </div>
+            </div>
+        </section>
+
+        <hr class="divider-thick">
+
+        <!-- ==================== PASO 8 ==================== -->
+        <section id="paso8">
+            <div class="step-card green">
+                <h3><span class="step-number">8</span> Subir el Proyecto a GitHub</h3>
+                
+                <p>Es hora de subir todo a GitHub. Sigue estos comandos paso a paso.</p>
+
+                <h4>8.1 — Crear el repositorio en GitHub</h4>
+                <ol>
+                    <li>Ve a <a href="https://github.com/new" target="_blank">github.com/new</a></li>
+                    <li>Nombre del repositorio: <code>[nombre-proyecto]-grupo-[N]</code><br>
+                        Ejemplo: <code>biblioteca-digital-grupo-1</code></li>
+                    <li>Descripción: "Sistema de Gestión de Biblioteca Digital — Proyecto POO Corhuila"</li>
+                    <li>Visibilidad: <strong>Public</strong></li>
+                    <li>NO marques "Añadir README" (ya lo tienes)</li>
+                    <li>Haz clic en <strong>"Create repository"</strong></li>
+                </ol>
+
+                <h4>8.2 — Subir el código desde tu computador</h4>
+                <pre><code># Ubícate en la carpeta de tu proyecto
+cd biblioteca-digital-grupo-1
+
+# Inicializar git
+git init
+
+# Agregar todos los archivos
+git add .
+
+# Primer commit
+git commit -m "feat: estructura base del proyecto con diagrama UML y clases modelo"
+
+# Conectar con GitHub (reemplaza con TU URL)
+git remote add origin https://github.com/TU-USUARIO/biblioteca-digital-grupo-1.git
+
+# Subir al repositorio
+git branch -M main
+git push -u origin main</code></pre>
+
+                <h4>8.3 — Commits recomendados durante el desarrollo</h4>
+                <p>No subas todo en un solo commit. Haz commits <strong>descriptivos</strong> a medida que avanzas:</p>
+                <div class="table-responsive">
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>Orden</th>
+                                <th>Mensaje del Commit</th>
+                                <th>Qué incluye</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td><code>feat: estructura inicial del proyecto</code></td>
+                                <td>Carpetas, README vacío, Main vacío</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td><code>feat: agregar diagrama de clases UML</code></td>
+                                <td>Imagen del diagrama en /diagrams</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td><code>feat: implementar clase abstracta RecursoDigital</code></td>
+                                <td>RecursoDigital.java</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td><code>feat: implementar clases Libro, Revista y Audiolibro</code></td>
+                                <td>Las 3 subclases</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td><code>feat: implementar clases Usuario, Prestamo, Reserva y Notificacion</code></td>
+                                <td>Resto de clases del modelo</td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td><code>docs: completar README con documentación parcial</code></td>
+                                <td>README.md completo para Entrega 1</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="danger-box">
+                    <h4>🚨 Errores comunes al subir a GitHub</h4>
+                    <ul>
+                        <li>Subir todo en un solo commit gigante → se pierde historial</li>
+                        <li>No incluir la imagen del diagrama en la carpeta <code>/diagrams</code></li>
+                        <li>Olvidar verificar que la imagen del diagrama se vea correctamente en el README de GitHub</li>
+                        <li>No hacer el repositorio público (el profesor no puede verlo)</li>
+                    </ul>
+                </div>
+
+                <div class="success-box">
+                    <h4>✅ Resultado del Paso 8</h4>
+                    <p>Tu proyecto está en <strong>GitHub</strong> con commits descriptivos, el diagrama visible en el README y todo el código organizado.</p>
+                </div>
+            </div>
+        </section>
+
+        <hr class="divider-thick">
+
+        <!-- ==================== CHECKLIST FINAL ==================== -->
+        <section id="checklist">
+            <h2>Checklist Final — ¿Está Lista mi Entrega 1?</h2>
+
+            <p>Antes de entregar, verifica cada uno de estos puntos:</p>
+
+            <h3>📊 Diagrama de Clases UML</h3>
+            <ul class="checklist">
+                <li>☐ Tiene al menos <strong>6 clases</strong> (idealmente 8 según las entidades asignadas)</li>
+                <li>☐ Al menos <strong>1 clase abstracta</strong> marcada con <code>&lt;&lt;abstract&gt;&gt;</code></li>
+                <li>☐ Todos los atributos tienen <strong>visibilidad</strong> (+ - #) y <strong>tipo de dato</strong></li>
+                <li>☐ Todos los métodos tienen <strong>visibilidad</strong>, <strong>parámetros</strong> y <strong>tipo de retorno</strong></li>
+                <li>☐ Al menos <strong>3 tipos de relación</strong> (herencia, composición, asociación, etc.)</li>
+                <li>☐ <strong>Multiplicidad</strong> indicada en todas las relaciones</li>
+                <li>☐ El diagrama está <strong>exportado como .png o .svg</strong> en la carpeta <code>/diagrams</code></li>
+            </ul>
+
+            <h3>💻 Código Java</h3>
+            <ul class="checklist">
+                <li>☐ El proyecto está <strong>organizado por paquetes</strong> (carpetas dentro de <code>/src</code>)</li>
+                <li>☐ Cada clase tiene la declaración <code>package</code> correcta</li>
+                <li>☐ Los atributos son <strong>private</strong> (o <strong>protected</strong> en la abstracta)</li>
+                <li>☐ Cada clase tiene <strong>constructor</strong> completo</li>
+                <li>☐ Cada clase tiene <strong>getters y setters</strong> según corresponda</li>
+                <li>☐ Cada clase tiene método <strong>toString()</strong></li>
+                <li>☐ Las relaciones del diagrama se <strong>reflejan como atributos</strong> en el código</li>
+                <li>☐ El código <strong>compila sin errores</strong></li>
+            </ul>
+
+            <h3>📝 README.md</h3>
+            <ul class="checklist">
+                <li>☐ Tiene <strong>descripción del sistema</strong></li>
+                <li>☐ Tiene <strong>nombres e integrantes</strong> del grupo</li>
+                <li>☐ Tiene la <strong>imagen del diagrama UML</strong> visible (no link roto)</li>
+                <li>☐ Tiene la <strong>estructura del proyecto</strong></li>
+                <li>☐ Tiene <strong>explicación de cada relación</strong> con justificación</li>
+                <li>☐ Tiene la <strong>tabla de clases</strong> implementadas</li>
+            </ul>
+
+            <h3>🐙 GitHub</h3>
+            <ul class="checklist">
+                <li>☐ El repositorio está <strong>público</strong></li>
+                <li>☐ El nombre sigue el formato: <code>[nombre-proyecto]-grupo-[N]</code></li>
+                <li>☐ Tiene <strong>múltiples commits</strong> con mensajes descriptivos</li>
+                <li>☐ La imagen del diagrama se <strong>ve correctamente</strong> en el README al abrir el repo</li>
+            </ul>
+
+            <div class="info-box">
+                <h4>📌 Recuerda las Fechas</h4>
+                <ul>
+                    <li><strong>📅 Entrega en GitHub:</strong> 17 de Abril de 2026</li>
+                    <li><strong>🎤 Sustentación oral:</strong> 21 de Abril de 2026</li>
+                </ul>
+            </div>
+        </section>
+
+        <hr class="divider-thick">
+
+        <!-- ==================== RESUMEN DIAGRAMA → CÓDIGO ==================== -->
+        <section id="resumen-traduccion">
+            <h2>Resumen: Cómo Traducir el Diagrama UML a Código Java</h2>
+
+            <div class="table-responsive">
+                <table class="styled-table">
+                    <thead>
+                        <tr>
+                            <th>Elemento UML</th>
+                            <th>Ejemplo en Diagrama</th>
+                            <th>Traducción a Java</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Clase</strong></td>
+                            <td>Rectángulo con 3 secciones</td>
+                            <td><code>public class NombreClase { }</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Clase abstracta</strong></td>
+                            <td><code>&lt;&lt;abstract&gt;&gt;</code> en el nombre</td>
+                            <td><code>public abstract class Nombre { }</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Atributo privado</strong></td>
+                            <td><code>- nombre: String</code></td>
+                            <td><code>private String nombre;</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Atributo protegido</strong></td>
+                            <td><code># id: int</code></td>
+                            <td><code>protected int id;</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Método público</strong></td>
+                            <td><code>+ getNombre(): String</code></td>
+                            <td><code>public String getNombre() { return nombre; }</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Método abstracto</strong></td>
+                            <td><code>+ metodo(): tipo {abstract}</code></td>
+                            <td><code>public abstract String metodo();</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Herencia</strong></td>
+                            <td>Flecha hueca ───▷</td>
+                            <td><code>public class Libro extends RecursoDigital { }</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Composición / Asociación</strong></td>
+                            <td>◆─── o ─────</td>
+                            <td><code>private Usuario usuario;</code> (atributo de tipo objeto)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Multiplicidad 0..*</strong></td>
+                            <td><code>0..*</code> en la línea</td>
+                            <td><code>private List&lt;Prestamo&gt; prestamos;</code> (para Entrega 2)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Constructor</strong></td>
+                            <td>No se dibuja en UML</td>
+                            <td><code>public Clase(params) { this.attr = param; }</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>super()</strong></td>
+                            <td>Herencia ───▷</td>
+                            <td><code>super(id, titulo, anio);</code> en constructor de la hija</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="success-box">
+                <h4>✅ ¡Éxito!</h4>
+                <p>Si seguiste estos 8 pasos, tu Entrega 1 está completa. En la <strong>Entrega 2 (Tercer Corte)</strong> implementarás la herencia y clase abstracta en código, las interfaces, los principios SOLID, la lógica de negocio y el Main funcional.</p>
+                <p>📎 Consulta: <a href="proyecto-diagramacion-clases-solid.html">Proyecto — Diagramación de Clases y SOLID</a> | <a href="../01-session/diagrama-de-clases.html">Guía de Diagramas de Clases UML</a></p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <h3>Guía Paso a Paso — Entrega 1: Diagrama de Clases y Código Base</h3>
+            <p><strong>Creado por:</strong> Ing. Julian Quimbayo Castro</p>
+            <p>Última actualización: Marzo 2026</p>
+            <p>Este material es de uso educativo y está diseñado para estudiantes de Ingeniería de Sistemas.</p>
+            <p style="margin-top: 20px; font-size: 0.9em; opacity: 0.9;">© Corporación Universitaria del Huila — Corhuila</p>
+        </div>
+    </footer>
+
+    <button id="scrollTopBtn" title="Volver arriba">↑</button>
+
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    setupScrollButton();
+    setupNavigation();
+    setupSmoothScroll();
+    highlightActiveSection();
+});
+
+function setupScrollButton() {
+    const scrollBtn = document.getElementById('scrollTopBtn');
+
+    window.addEventListener('scroll', function() {
+        if (document.documentElement.scrollTop > 300 || document.body.scrollTop > 300) {
+            scrollBtn.style.display = 'block';
+        } else {
+            scrollBtn.style.display = 'none';
+        }
+    });
+
+    scrollBtn.addEventListener('click', function() {
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+    });
+}
+
+function setupSmoothScroll() {
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    });
+}
+
+function setupNavigation() {
+    const navLinks = document.querySelectorAll('.main-nav a');
+    window.addEventListener('scroll', highlightActiveSection);
+}
+
+function highlightActiveSection() {
+    const navLinks = document.querySelectorAll('.main-nav a');
+    let current = '';
+
+    const sections = document.querySelectorAll('section');
+    sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        if (pageYOffset >= sectionTop - 200) {
+            current = section.getAttribute('id');
+        }
+    });
+
+    navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === `#${current}`) {
+            link.classList.add('active');
+        }
+    });
+}
+
+document.querySelectorAll('pre').forEach(pre => {
+    const button = document.createElement('button');
+    button.textContent = '📋 Copiar';
+    button.style.cssText = `
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        padding: 8px 12px;
+        background-color: #27ae60;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 12px;
+        opacity: 0;
+        transition: opacity 0.3s;
+        z-index: 10;
+    `;
+
+    pre.style.position = 'relative';
+    pre.appendChild(button);
+
+    pre.addEventListener('mouseenter', () => {
+        button.style.opacity = '1';
+    });
+
+    pre.addEventListener('mouseleave', () => {
+        button.style.opacity = '0';
+    });
+
+    button.addEventListener('click', () => {
+        const code = pre.innerText;
+        navigator.clipboard.writeText(code).then(() => {
+            button.textContent = '✅ Copiado';
+            setTimeout(() => {
+                button.textContent = '📋 Copiar';
+            }, 2000);
+        });
+    });
+});
+    </script>
+</body>
+</html>
