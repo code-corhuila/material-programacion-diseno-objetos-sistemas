@@ -1,0 +1,2139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía Paso a Paso — Entrega 2: SOLID, Interfaces y Lógica de Negocio | Ingeniería de Sistemas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-color: #1e3c72;
+    --secondary-color: #2a5298;
+    --accent-color: #ff6b6b;
+    --light-bg: #f8f9fa;
+    --dark-text: #2c3e50;
+    --border-color: #e0e0e0;
+    --success-color: #27ae60;
+    --warning-color: #f39c12;
+    --info-color: #3498db;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    line-height: 1.6;
+    color: var(--dark-text);
+    background-color: #fff;
+}
+
+.main-header {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: white;
+    padding: 0;
+}
+
+.top-bar {
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 20px 0;
+    text-align: center;
+}
+
+.brand-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.brand-name {
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    margin: 5px 0;
+}
+
+.main-nav {
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 15px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.main-nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0;
+}
+
+.main-nav a {
+    color: white;
+    text-decoration: none;
+    padding: 12px 20px;
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.3s;
+    border-bottom: 3px solid transparent;
+}
+
+.main-nav a:hover,
+.main-nav a.active {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-bottom-color: var(--accent-color);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.main-content {
+    padding: 50px 0;
+}
+
+section {
+    margin-bottom: 40px;
+}
+
+h1 {
+    color: var(--primary-color);
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+h2 {
+    color: var(--secondary-color);
+    font-size: 2em;
+    margin-bottom: 25px;
+    border-left: 5px solid var(--accent-color);
+    padding-left: 15px;
+}
+
+h3 {
+    color: var(--primary-color);
+    font-size: 1.5em;
+    margin-top: 25px;
+    margin-bottom: 15px;
+}
+
+h4 {
+    color: var(--secondary-color);
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.hero-section {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: white;
+    padding: 60px 40px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.hero-section h1 {
+    color: white;
+    margin-bottom: 20px;
+}
+
+.lead {
+    font-size: 1.2em;
+    line-height: 1.8;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.divider {
+    border: none;
+    border-top: 2px solid var(--border-color);
+    margin: 40px 0;
+}
+
+.divider-thick {
+    border: none;
+    border-top: 3px solid var(--accent-color);
+    margin: 50px 0;
+}
+
+.definition-box {
+    background-color: #e8f4f8;
+    border-left: 5px solid var(--secondary-color);
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 5px;
+    font-size: 1.05em;
+}
+
+.reflection-box {
+    background-color: #fff3cd;
+    border-left: 5px solid var(--warning-color);
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 5px;
+}
+
+.reflection-box h4 {
+    color: #856404;
+    margin-bottom: 10px;
+}
+
+.reflection-box p, .reflection-box ul, .reflection-box li {
+    color: #856404;
+    line-height: 1.7;
+}
+
+.info-box {
+    background-color: #d1ecf1;
+    border-left: 5px solid var(--info-color);
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 5px;
+}
+
+.info-box h4 {
+    color: #0c5460;
+    margin-bottom: 10px;
+}
+
+.info-box p, .info-box li {
+    color: #0c5460;
+    line-height: 1.7;
+}
+
+.success-box {
+    background-color: #d4edda;
+    border-left: 5px solid var(--success-color);
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 5px;
+}
+
+.success-box h4 {
+    color: #155724;
+    margin-bottom: 10px;
+}
+
+.success-box p, .success-box li {
+    color: #155724;
+    line-height: 1.7;
+}
+
+.danger-box {
+    background-color: #f8d7da;
+    border-left: 5px solid var(--accent-color);
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 5px;
+}
+
+.danger-box h4 {
+    color: #721c24;
+    margin-bottom: 10px;
+}
+
+.danger-box p, .danger-box li {
+    color: #721c24;
+    line-height: 1.7;
+}
+
+.comparison-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin: 30px 0;
+}
+
+.card {
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.card h3,
+.card h4 {
+    color: var(--secondary-color);
+    margin-top: 0;
+}
+
+.step-card {
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 30px;
+    margin: 25px 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    border-left: 6px solid var(--secondary-color);
+    position: relative;
+}
+
+.step-card.highlight {
+    border-left-color: var(--accent-color);
+}
+
+.step-card.green {
+    border-left-color: var(--success-color);
+}
+
+.step-card.orange {
+    border-left-color: var(--warning-color);
+}
+
+.step-card.purple {
+    border-left-color: #9b59b6;
+}
+
+.step-card.teal {
+    border-left-color: #1abc9c;
+}
+
+.step-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 45px;
+    height: 45px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    border-radius: 50%;
+    font-size: 1.3em;
+    font-weight: 700;
+    margin-right: 15px;
+    flex-shrink: 0;
+}
+
+.step-card h3 {
+    display: flex;
+    align-items: center;
+    margin-top: 0;
+}
+
+.table-responsive {
+    overflow-x: auto;
+    margin: 30px 0;
+}
+
+.styled-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.styled-table thead tr {
+    background-color: var(--secondary-color);
+    color: white;
+    text-align: left;
+    font-weight: 500;
+}
+
+.styled-table th,
+.styled-table td {
+    padding: 15px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.styled-table tbody tr:hover {
+    background-color: var(--light-bg);
+}
+
+.styled-table tbody tr:nth-child(odd) {
+    background-color: #fafafa;
+}
+
+pre {
+    background-color: #2d2d2d;
+    color: #f8f8f2;
+    padding: 20px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 20px 0;
+    font-family: 'Courier New', monospace;
+    font-size: 0.95em;
+    line-height: 1.5;
+}
+
+code {
+    font-family: 'Courier New', monospace;
+    background-color: #f4f4f4;
+    padding: 2px 6px;
+    border-radius: 3px;
+    color: var(--primary-color);
+}
+
+pre code {
+    background-color: transparent;
+    color: #f8f8f2;
+    padding: 0;
+}
+
+.diagram-box {
+    background-color: #f0f8ff;
+    border: 2px solid var(--info-color);
+    padding: 30px;
+    margin: 30px 0;
+    border-radius: 8px;
+    text-align: center;
+    font-family: 'Courier New', monospace;
+    overflow-x: auto;
+}
+
+.diagram-box pre {
+    background-color: transparent;
+    color: var(--dark-text);
+    margin: 0;
+    padding: 0;
+    font-size: 0.9em;
+}
+
+.case-study-section {
+    background-color: var(--light-bg);
+    padding: 40px;
+    border-radius: 10px;
+    margin: 40px 0;
+}
+
+.case-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.case-header h2 {
+    border-left: none;
+    padding-left: 0;
+    margin-bottom: 10px;
+}
+
+.case-header h3 {
+    color: var(--accent-color);
+    font-size: 1.3em;
+}
+
+.folder-tree {
+    background-color: #1e1e1e;
+    color: #d4d4d4;
+    padding: 25px;
+    border-radius: 8px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.95em;
+    line-height: 1.8;
+    margin: 20px 0;
+}
+
+.folder-tree .folder {
+    color: #dcdcaa;
+}
+
+.folder-tree .file-java {
+    color: #ce9178;
+}
+
+.folder-tree .file-md {
+    color: #9cdcfe;
+}
+
+.folder-tree .file-img {
+    color: #6a9955;
+}
+
+.checklist {
+    list-style: none;
+    margin-left: 0;
+    padding: 0;
+}
+
+.checklist li {
+    padding: 10px 15px;
+    margin: 5px 0;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    border-left: 4px solid var(--border-color);
+    transition: border-color 0.3s;
+}
+
+.checklist li:hover {
+    border-left-color: var(--success-color);
+}
+
+.solid-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.85em;
+    font-weight: 700;
+    color: white;
+    margin-right: 6px;
+}
+.solid-badge.srp { background-color: #e74c3c; }
+.solid-badge.ocp { background-color: #e67e22; }
+.solid-badge.lsp { background-color: #d4ac0d; color: #333; }
+.solid-badge.isp { background-color: #27ae60; }
+.solid-badge.dip { background-color: #2980b9; }
+
+.main-footer {
+    background: var(--primary-color);
+    color: white;
+    text-align: center;
+    padding: 40px 0;
+    margin-top: 50px;
+}
+
+.main-footer p {
+    margin: 8px 0;
+    font-size: 0.95em;
+}
+
+.main-footer a {
+    color: #fff9e6;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.main-footer a:hover {
+    color: var(--accent-color);
+}
+
+#scrollTopBtn {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    padding: 15px 20px;
+    font-size: 18px;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    z-index: 99;
+    transition: background-color 0.3s;
+}
+
+#scrollTopBtn:hover {
+    background-color: var(--accent-color);
+}
+
+ul, ol {
+    margin: 15px 0;
+    margin-left: 30px;
+}
+
+li {
+    margin: 8px 0;
+    line-height: 1.7;
+}
+
+a {
+    color: var(--secondary-color);
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+a:hover {
+    color: var(--accent-color);
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    h1 { font-size: 1.8em; }
+    h2 { font-size: 1.5em; }
+    .hero-section { padding: 40px 20px; }
+    .main-nav ul { flex-direction: column; }
+    .main-nav a { padding: 10px 15px; font-size: 13px; }
+    .comparison-cards { grid-template-columns: 1fr; }
+    .case-study-section { padding: 20px; }
+    .step-card { padding: 20px; }
+}
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="top-bar">
+            <div class="container brand-container">
+                <img src="https://raw.githubusercontent.com/code-corhuila/material-mineria-datos/b3725d694125ab35294ddfe415a327bc1445d32c/01-week/01-session/LOGO%20CORHUILA%20BLANCO%20PNG%20(2).png" alt="Logo Corhuila" class="logo-corhuila" style="max-width: 120px; height: auto; margin-bottom: 15px;">
+                <h1 class="brand-name" style="color: white;">Guía Paso a Paso — Entrega 2 (Tercer Corte)</h1>
+                <p style="color: white;">Programación y Diseño Orientado a Objetos — Ingeniería de Sistemas</p>
+            </div>
+        </div>
+        <nav class="main-nav">
+            <div class="container">
+                <ul>
+                    <li><a href="#alcance">Alcance</a></li>
+                    <li><a href="#paso1">Paso 1: Interfaces</a></li>
+                    <li><a href="#paso2">Paso 2: Herencia</a></li>
+                    <li><a href="#paso3">Paso 3: SOLID</a></li>
+                    <li><a href="#paso4">Paso 4: Servicios</a></li>
+                    <li><a href="#paso5">Paso 5: Main</a></li>
+                    <li><a href="#paso6">Paso 6: README</a></li>
+                    <li><a href="#paso7">Paso 7: GitHub</a></li>
+                    <li><a href="#checklist">Checklist</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container main-content">
+
+        <!-- ==================== INTRODUCCIÓN ==================== -->
+        <section id="intro" class="hero-section">
+            <h1>Guía Paso a Paso — Entrega 2 (Tercer Corte)</h1>
+            <p class="lead">Esta guía te lleva desde las clases base de la Entrega 1 hasta la implementación completa con <strong>interfaces</strong>, <strong>herencia funcional</strong>, los <strong>cinco principios SOLID</strong>, <strong>lógica de negocio</strong> y la clase <strong>Main</strong> funcional. Usamos como ejemplo el <em>"Sistema de Gestión de Biblioteca Digital"</em>, pero debes aplicarlo a <strong>tu proyecto asignado</strong>.</p>
+        </section>
+
+        <hr class="divider">
+
+        <!-- ==================== ALCANCE ==================== -->
+        <section id="alcance">
+            <h2>¿Qué se Entrega en el Tercer Corte?</h2>
+
+            <div class="definition-box">
+                <h4>📦 Entrega 2 — Fecha límite GitHub: 15 de Mayo de 2026 | Sustentación: 19 de Mayo de 2026</h4>
+                <ul>
+                    <li>✅ Herencia y clase abstracta <strong>implementadas y funcionales</strong> en código</li>
+                    <li>✅ Al menos <strong>2 interfaces</strong> definidas e implementadas</li>
+                    <li>✅ Los <strong>5 principios SOLID</strong> aplicados y justificados con código</li>
+                    <li>✅ Clases de servicio con <strong>lógica de negocio</strong> funcional</li>
+                    <li>✅ Polimorfismo y composición aplicados correctamente</li>
+                    <li>✅ Clase <code>Main</code> que demuestre el funcionamiento del sistema</li>
+                    <li>✅ README.md final con sección <strong>"Aplicación de Principios SOLID"</strong></li>
+                    <li>✅ Conclusiones y lecciones aprendidas en el README</li>
+                </ul>
+            </div>
+
+            <div class="info-box">
+                <h4>📌 Punto de partida: Entrega 1</h4>
+                <p>Esta entrega <strong>amplía</strong> lo que construiste en la Entrega 1. Tienes las clases base listas (atributos, constructores, getters/setters). Ahora agregas comportamiento, interfaces, lógica y principios de diseño.</p>
+                <p>La estructura de carpetas base ya existe. Agregarás dos paquetes nuevos: <code>service</code> e <code>interfaces</code>.</p>
+            </div>
+
+            <div class="reflection-box">
+                <h4>⚠️ Lo que SÍ se pide en esta entrega (diferencias con la Entrega 1)</h4>
+                <ul>
+                    <li>✅ Método abstracto <code>mostrarInformacion()</code> implementado en todas las subclases</li>
+                    <li>✅ Interfaces (Ej: <code>Prestable</code>, <code>Descargable</code>) aplicadas a las clases</li>
+                    <li>✅ Clases de servicio separadas (SRP): <code>GestorPrestamos</code>, <code>GestorCatalogo</code>, etc.</li>
+                    <li>✅ Polimorfismo: uso de la clase abstracta como tipo de referencia</li>
+                    <li>✅ <code>Main</code> que crea objetos, ejecuta operaciones y muestra resultados</li>
+                    <li>✅ README con sección SOLID documentada con fragmentos de código real</li>
+                </ul>
+            </div>
+        </section>
+
+        <hr class="divider-thick">
+
+        <!-- ==================== PASO 1: INTERFACES ==================== -->
+        <section id="paso1">
+            <div class="step-card">
+                <h3><span class="step-number">1</span> Definir e Implementar las Interfaces</h3>
+
+                <p>Las interfaces definen <strong>contratos de comportamiento</strong>. Una interfaz dice <em>"cualquier clase que me implemente DEBE tener estos métodos"</em>. Aplica el principio <span class="solid-badge isp">ISP</span> dividiéndolas por responsabilidad.</p>
+
+                <div class="info-box">
+                    <h4>📌 ¿Dónde creo las interfaces?</h4>
+                    <p>Crea un nuevo paquete <code>com.biblioteca.interfaces</code>. Cada interfaz va en su propio archivo <code>.java</code> dentro de ese paquete.</p>
+                </div>
+
+                <h4>Ejemplo: Interfaces para el Sistema de Biblioteca Digital</h4>
+                <div class="table-responsive">
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>Interfaz</th>
+                                <th>¿Quién la implementa?</th>
+                                <th>Métodos que define</th>
+                                <th>Principio</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>Prestable</code></td>
+                                <td>Libro, Revista, Audiolibro</td>
+                                <td><code>prestar()</code>, <code>devolver()</code></td>
+                                <td><span class="solid-badge isp">ISP</span></td>
+                            </tr>
+                            <tr>
+                                <td><code>Descargable</code></td>
+                                <td>Libro, Audiolibro</td>
+                                <td><code>descargar()</code>, <code>getFormato()</code></td>
+                                <td><span class="solid-badge isp">ISP</span></td>
+                            </tr>
+                            <tr>
+                                <td><code>Notificable</code></td>
+                                <td>Clases de servicio de notificación</td>
+                                <td><code>enviarNotificacion(Usuario, String)</code></td>
+                                <td><span class="solid-badge dip">DIP</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h4>Ejemplo: Interfaz Prestable.java</h4>
+                <pre><code>package com.biblioteca.interfaces;
+
+/**
+ * Contrato para recursos que pueden ser prestados.
+ * Principio ISP: interfaz pequeña y específica.
+ */
+public interface Prestable {
+
+    /**
+     * Marca el recurso como prestado (no disponible).
+     * @return true si el préstamo fue exitoso, false si no está disponible
+     */
+    boolean prestar();
+
+    /**
+     * Marca el recurso como devuelto (disponible nuevamente).
+     */
+    void devolver();
+}</code></pre>
+
+                <h4>Ejemplo: Interfaz Descargable.java</h4>
+                <pre><code>package com.biblioteca.interfaces;
+
+/**
+ * Contrato para recursos que pueden descargarse digitalmente.
+ * Principio ISP: separado de Prestable porque no todos los
+ * recursos prestables son descargables (ej: revistas físicas).
+ */
+public interface Descargable {
+
+    /**
+     * Inicia la descarga del recurso.
+     * @return URL o ruta del recurso descargado
+     */
+    String descargar();
+
+    /**
+     * Retorna el formato del archivo descargable.
+     * @return formato (PDF, MP3, EPUB, etc.)
+     */
+    String getFormato();
+}</code></pre>
+
+                <h4>Ejemplo: Interfaz Notificable.java</h4>
+                <pre><code>package com.biblioteca.interfaces;
+
+import com.biblioteca.model.Usuario;
+
+/**
+ * Abstracción para el envío de notificaciones.
+ * Principio DIP: las clases de alto nivel (servicios)
+ * dependen de esta abstracción, no de una implementación concreta.
+ */
+public interface Notificable {
+
+    /**
+     * Envía una notificación a un usuario.
+     * @param usuario destinatario
+     * @param mensaje contenido de la notificación
+     * @param tipo tipo de notificación (VENCIMIENTO, DISPONIBILIDAD, etc.)
+     */
+    void enviarNotificacion(Usuario usuario, String mensaje, String tipo);
+}</code></pre>
+
+                <div class="reflection-box">
+                    <h4>💡 ¿Por qué separar las interfaces?</h4>
+                    <p>Si tuvieras una sola interfaz <code>RecursoCompleto</code> con todos los métodos, las clases que NO pueden descargarse (como una Revista física) estarían obligadas a implementar <code>descargar()</code> con un cuerpo vacío o lanzando una excepción. Eso viola el <strong>Principio de Segregación de Interfaces (ISP)</strong>.</p>
+                    <ul>
+                        <li>✅ <strong>Correcto:</strong> Interfaces pequeñas → cada clase implementa solo lo que realmente puede hacer</li>
+                        <li>❌ <strong>Incorrecto:</strong> Una interfaz grande → clases con métodos vacíos o con <code>throw new UnsupportedOperationException()</code></li>
+                    </ul>
+                </div>
+
+                <div class="success-box">
+                    <h4>✅ Resultado del Paso 1</h4>
+                    <p>Tienes al menos <strong>2 interfaces</strong> creadas en el paquete <code>interfaces</code>, cada una con sus métodos bien definidos y documentados. Las interfaces representan <strong>comportamientos específicos</strong>, no entidades.</p>
+                </div>
+            </div>
+        </section>
+
+        <hr class="divider-thick">
+
+        <!-- ==================== PASO 2: HERENCIA FUNCIONAL ==================== -->
+        <section id="paso2">
+            <div class="step-card highlight">
+                <h3><span class="step-number">2</span> Completar Herencia: Implementar Interfaces y Métodos Abstractos</h3>
+
+                <p>Actualiza las clases concretas de la Entrega 1 para que implementen las interfaces y completen los métodos abstractos con lógica real.</p>
+
+                <h4>Ejemplo: Libro.java actualizado — implementa Prestable y Descargable</h4>
+                <pre><code>package com.biblioteca.model;
+
+import com.biblioteca.interfaces.Prestable;
+import com.biblioteca.interfaces.Descargable;
+
+/**
+ * Libro: subclase de RecursoDigital.
+ * Implementa Prestable (puede prestarse) y Descargable (tiene formato PDF/EPUB).
+ *
+ * Principio OCP: agregamos comportamiento implementando interfaces sin
+ * modificar la clase padre RecursoDigital.
+ *
+ * Principio LSP: Libro puede sustituir a RecursoDigital en cualquier
+ * contexto sin alterar el comportamiento esperado.
+ */
+public class Libro extends RecursoDigital implements Prestable, Descargable {
+
+    private String isbn;
+    private String autor;
+    private int numeroPaginas;
+    private String genero;
+    private String formato;   // PDF, EPUB
+
+    public Libro(int id, String titulo, int anioPublicacion,
+                 String isbn, String autor, int numeroPaginas,
+                 String genero, String formato) {
+        super(id, titulo, anioPublicacion);
+        this.isbn = isbn;
+        this.autor = autor;
+        this.numeroPaginas = numeroPaginas;
+        this.genero = genero;
+        this.formato = formato;
+    }
+
+    // ── Getters ──────────────────────────────────────────────────
+    public String getIsbn()          { return isbn; }
+    public String getAutor()         { return autor; }
+    public int getNumeroPaginas()    { return numeroPaginas; }
+    public String getGenero()        { return genero; }
+    public void setGenero(String g)  { this.genero = g; }
+
+    // ── Implementación de Prestable ───────────────────────────────
+    @Override
+    public boolean prestar() {
+        if (!disponible) {
+            System.out.println("El libro '" + titulo + "' no está disponible.");
+            return false;
+        }
+        disponible = false;
+        System.out.println("Libro '" + titulo + "' prestado exitosamente.");
+        return true;
+    }
+
+    @Override
+    public void devolver() {
+        disponible = true;
+        System.out.println("Libro '" + titulo + "' devuelto. Ya está disponible.");
+    }
+
+    // ── Implementación de Descargable ─────────────────────────────
+    @Override
+    public String descargar() {
+        return "https://biblioteca.ejemplo.com/descargas/" + isbn + "." + formato.toLowerCase();
+    }
+
+    @Override
+    public String getFormato() {
+        return formato;
+    }
+
+    // ── Implementación del método abstracto de RecursoDigital ─────
+    @Override
+    public String mostrarInformacion() {
+        return "[LIBRO] " + titulo +
+               " | Autor: " + autor +
+               " | ISBN: " + isbn +
+               " | Páginas: " + numeroPaginas +
+               " | Género: " + genero +
+               " | Año: " + anioPublicacion +
+               " | Formato: " + formato +
+               " | Disponible: " + (disponible ? "Sí" : "No");
+    }
+
+    @Override
+    public String toString() {
+        return "Libro{isbn='" + isbn + "', autor='" + autor +
+               "', titulo='" + titulo + "', paginas=" + numeroPaginas + '}';
+    }
+}</code></pre>
+
+                <h4>Ejemplo: Revista.java actualizada — implementa solo Prestable</h4>
+                <pre><code>package com.biblioteca.model;
+
+import com.biblioteca.interfaces.Prestable;
+
+/**
+ * Revista: implementa Prestable pero NO Descargable.
+ * ISP: no se fuerza a implementar métodos que no aplican.
+ */
+public class Revista extends RecursoDigital implements Prestable {
+
+    private int numeroEdicion;
+    private String periodicidad;
+    private String editorial;
+
+    public Revista(int id, String titulo, int anioPublicacion,
+                   int numeroEdicion, String periodicidad, String editorial) {
+        super(id, titulo, anioPublicacion);
+        this.numeroEdicion = numeroEdicion;
+        this.periodicidad  = periodicidad;
+        this.editorial     = editorial;
+    }
+
+    public int getNumeroEdicion()    { return numeroEdicion; }
+    public String getPeriodicidad()  { return periodicidad; }
+    public String getEditorial()     { return editorial; }
+
+    @Override
+    public boolean prestar() {
+        if (!disponible) {
+            System.out.println("La revista '" + titulo + "' no está disponible.");
+            return false;
+        }
+        disponible = false;
+        System.out.println("Revista '" + titulo + "' prestada exitosamente.");
+        return true;
+    }
+
+    @Override
+    public void devolver() {
+        disponible = true;
+        System.out.println("Revista '" + titulo + "' devuelta. Ya está disponible.");
+    }
+
+    @Override
+    public String mostrarInformacion() {
+        return "[REVISTA] " + titulo +
+               " | Edición #" + numeroEdicion +
+               " | Periodicidad: " + periodicidad +
+               " | Editorial: " + editorial +
+               " | Año: " + anioPublicacion +
+               " | Disponible: " + (disponible ? "Sí" : "No");
+    }
+
+    @Override
+    public String toString() {
+        return "Revista{titulo='" + titulo + "', edicion=" + numeroEdicion + '}';
+    }
+}</code></pre>
+
+                <h4>Ejemplo: Audiolibro.java actualizado — implementa Prestable y Descargable</h4>
+                <pre><code>package com.biblioteca.model;
+
+import com.biblioteca.interfaces.Prestable;
+import com.biblioteca.interfaces.Descargable;
+
+public class Audiolibro extends RecursoDigital implements Prestable, Descargable {
+
+    private int duracionMinutos;
+    private String narrador;
+    private String formato;   // MP3, AAC
+
+    public Audiolibro(int id, String titulo, int anioPublicacion,
+                      int duracionMinutos, String narrador, String formato) {
+        super(id, titulo, anioPublicacion);
+        this.duracionMinutos = duracionMinutos;
+        this.narrador        = narrador;
+        this.formato         = formato;
+    }
+
+    public int getDuracionMinutos() { return duracionMinutos; }
+    public String getNarrador()     { return narrador; }
+
+    @Override
+    public boolean prestar() {
+        if (!disponible) {
+            System.out.println("El audiolibro '" + titulo + "' no está disponible.");
+            return false;
+        }
+        disponible = false;
+        System.out.println("Audiolibro '" + titulo + "' prestado exitosamente.");
+        return true;
+    }
+
+    @Override
+    public void devolver() {
+        disponible = true;
+        System.out.println("Audiolibro '" + titulo + "' devuelto. Ya está disponible.");
+    }
+
+    @Override
+    public String descargar() {
+        return "https://biblioteca.ejemplo.com/audio/" + id + "." + formato.toLowerCase();
+    }
+
+    @Override
+    public String getFormato() { return formato; }
+
+    @Override
+    public String mostrarInformacion() {
+        return "[AUDIOLIBRO] " + titulo +
+               " | Narrador: " + narrador +
+               " | Duración: " + duracionMinutos + " min" +
+               " | Formato: " + formato +
+               " | Año: " + anioPublicacion +
+               " | Disponible: " + (disponible ? "Sí" : "No");
+    }
+
+    @Override
+    public String toString() {
+        return "Audiolibro{titulo='" + titulo + "', narrador='" + narrador +
+               "', duracion=" + duracionMinutos + " min}";
+    }
+}</code></pre>
+
+                <div class="info-box">
+                    <h4>📌 Polimorfismo en acción</h4>
+                    <p>Gracias a la herencia y las interfaces, puedes escribir código genérico:</p>
+                    <pre><code>// Polimorfismo: RecursoDigital como tipo de referencia
+RecursoDigital recurso = new Libro(...);
+System.out.println(recurso.mostrarInformacion()); // llama la versión de Libro
+
+// Polimorfismo con interfaz
+Prestable prestable = new Revista(...);
+prestable.prestar(); // llama la versión de Revista
+
+// Lista polimórfica
+List&lt;RecursoDigital&gt; catalogo = new ArrayList&lt;&gt;();
+catalogo.add(new Libro(...));
+catalogo.add(new Revista(...));
+catalogo.add(new Audiolibro(...));
+for (RecursoDigital r : catalogo) {
+    System.out.println(r.mostrarInformacion()); // cada uno muestra su propia info
+}</code></pre>
+                </div>
+
+                <div class="success-box">
+                    <h4>✅ Resultado del Paso 2</h4>
+                    <p>Todas las clases concretas implementan las interfaces correspondientes y el método abstracto <code>mostrarInformacion()</code> tiene lógica real en cada subclase. El código usa <strong>polimorfismo</strong> correctamente.</p>
+                </div>
+            </div>
+        </section>
+
+        <hr class="divider-thick">
+
+        <!-- ==================== PASO 3: PRINCIPIOS SOLID ==================== -->
+        <section id="paso3" class="case-study-section">
+            <div class="case-header">
+                <h2>Paso 3 — Aplicar los Cinco Principios SOLID</h2>
+                <h3>Cada principio con ejemplo de código del proyecto Biblioteca Digital</h3>
+            </div>
+
+            <!-- SRP -->
+            <div class="step-card">
+                <h3><span class="solid-badge srp" style="font-size:1em; padding:6px 14px; border-radius:50%; margin-right:10px;">S</span> SRP — Single Responsibility Principle</h3>
+                <p><strong>Cada clase debe tener una única razón para cambiar.</strong></p>
+
+                <div class="danger-box">
+                    <h4>❌ Violación de SRP — Clase con múltiples responsabilidades</h4>
+                    <pre><code>// MAL: RecursoDigital gestiona el préstamo, la notificación y el guardado
+public class RecursoDigital {
+    public void prestar(Usuario u) { /* lógica de préstamo */ }
+    public void enviarEmailVencimiento(Usuario u) { /* lógica de email */ }
+    public void guardarEnBaseDatos() { /* lógica de persistencia */ }
+}</code></pre>
+                </div>
+
+                <div class="success-box">
+                    <h4>✅ Aplicación correcta de SRP — Responsabilidades separadas</h4>
+                    <pre><code>// BIEN: cada clase tiene UNA responsabilidad
+
+// RecursoDigital: solo representa el recurso (modelo)
+public abstract class RecursoDigital { ... }
+
+// GestorPrestamos: solo gestiona la lógica de préstamos
+public class GestorPrestamos {
+    public Prestamo realizarPrestamo(Usuario u, RecursoDigital r) { ... }
+    public void registrarDevolucion(Prestamo p) { ... }
+}
+
+// ServicioNotificacion: solo envía notificaciones
+public class ServicioNotificacion implements Notificable {
+    public void enviarNotificacion(Usuario u, String msg, String tipo) { ... }
+}
+
+// GestorCatalogo: solo gestiona el catálogo de recursos
+public class GestorCatalogo {
+    public void agregarRecurso(RecursoDigital r) { ... }
+    public List&lt;RecursoDigital&gt; buscarPorTitulo(String titulo) { ... }
+}</code></pre>
+                </div>
+                <p><strong>Justificación:</strong> Si cambia la lógica de notificaciones (por ejemplo, de email a SMS), solo modificamos <code>ServicioNotificacion</code>, sin tocar <code>GestorPrestamos</code> ni los modelos.</p>
+            </div>
+
+            <!-- OCP -->
+            <div class="step-card highlight">
+                <h3><span class="solid-badge ocp" style="font-size:1em; padding:6px 14px; border-radius:50%; margin-right:10px;">O</span> OCP — Open/Closed Principle</h3>
+                <p><strong>Las clases deben estar abiertas para extensión, cerradas para modificación.</strong></p>
+
+                <div class="danger-box">
+                    <h4>❌ Violación de OCP — Modificar código existente para agregar tipos</h4>
+                    <pre><code>// MAL: cada vez que agregamos un tipo hay que modificar este método
+public String obtenerDescripcion(RecursoDigital r) {
+    if (r instanceof Libro) {
+        return "Libro: " + ((Libro) r).getAutor();
+    } else if (r instanceof Revista) {
+        return "Revista: edición " + ((Revista) r).getNumeroEdicion();
+    } else if (r instanceof Audiolibro) {
+        return "Audio: " + ((Audiolibro) r).getNarrador();
+    }
+    // Si agrego Podcast, tengo que modificar este método → viola OCP
+    return "";
+}</code></pre>
+                </div>
+
+                <div class="success-box">
+                    <h4>✅ Aplicación correcta de OCP — Extensión mediante herencia</h4>
+                    <pre><code>// BIEN: cada subclase implementa mostrarInformacion() de forma distinta.
+// Si agrego un nuevo tipo (Podcast), solo creo la clase nueva SIN
+// modificar ningún código existente.
+
+public abstract class RecursoDigital {
+    public abstract String mostrarInformacion(); // contrato
+}
+
+public class Libro extends RecursoDigital {
+    @Override
+    public String mostrarInformacion() { return "[LIBRO] " + titulo + "..."; }
+}
+
+public class Podcast extends RecursoDigital {  // nuevo tipo → solo nueva clase
+    @Override
+    public String mostrarInformacion() { return "[PODCAST] " + titulo + "..."; }
+}
+
+// El catálogo funciona sin cambios:
+for (RecursoDigital r : catalogo) {
+    System.out.println(r.mostrarInformacion()); // funciona para todos los tipos
+}</code></pre>
+                </div>
+                <p><strong>Justificación:</strong> Agregar <code>Podcast</code> no requiere modificar <code>GestorCatalogo</code>, <code>Main</code> ni ninguna otra clase existente. El sistema está "cerrado para modificación" y "abierto para extensión".</p>
+            </div>
+
+            <!-- LSP -->
+            <div class="step-card green">
+                <h3><span class="solid-badge lsp" style="font-size:1em; padding:6px 14px; border-radius:50%; margin-right:10px;">L</span> LSP — Liskov Substitution Principle</h3>
+                <p><strong>Los objetos de una subclase deben poder sustituir a los de la superclase sin alterar el comportamiento correcto.</strong></p>
+
+                <div class="danger-box">
+                    <h4>❌ Violación de LSP — La subclase rompe el contrato del padre</h4>
+                    <pre><code>// MAL: RecursoNoDisponible sobreescribe isDisponible() de forma inconsistente
+public class RecursoNoDisponible extends RecursoDigital {
+    @Override
+    public boolean isDisponible() {
+        throw new UnsupportedOperationException("No se puede consultar disponibilidad");
+        // Cualquier código que espere un RecursoDigital se rompe aquí
+    }
+}</code></pre>
+                </div>
+
+                <div class="success-box">
+                    <h4>✅ Aplicación correcta de LSP — Subclases respetan el contrato</h4>
+                    <pre><code>// BIEN: Libro, Revista y Audiolibro implementan prestar()/devolver()
+// de forma coherente. El código que usa RecursoDigital funciona
+// igual sin importar qué subclase concreta reciba.
+
+public class GestorPrestamos {
+
+    // Este método funciona con Libro, Revista o Audiolibro → LSP
+    public Prestamo realizarPrestamo(Usuario usuario, RecursoDigital recurso) {
+        if (!(recurso instanceof Prestable)) {
+            System.out.println("Este recurso no es prestable.");
+            return null;
+        }
+        Prestable prestable = (Prestable) recurso;
+        boolean exitoso = prestable.prestar();
+        if (exitoso) {
+            return new Prestamo(generarId(), hoy(), null, "ACTIVO", usuario, recurso);
+        }
+        return null;
+    }
+}</code></pre>
+                </div>
+                <p><strong>Justificación:</strong> <code>GestorPrestamos.realizarPrestamo()</code> recibe cualquier <code>RecursoDigital</code>. Al llamar <code>prestar()</code> (vía interfaz <code>Prestable</code>), el comportamiento es correcto para Libro, Revista o Audiolibro. Ninguna subclase "rompe" el flujo.</p>
+            </div>
+
+            <!-- ISP -->
+            <div class="step-card orange">
+                <h3><span class="solid-badge isp" style="font-size:1em; padding:6px 14px; border-radius:50%; margin-right:10px;">I</span> ISP — Interface Segregation Principle</h3>
+                <p><strong>Es mejor tener muchas interfaces pequeñas y específicas que una sola interfaz grande.</strong></p>
+
+                <div class="danger-box">
+                    <h4>❌ Violación de ISP — Interfaz grande que fuerza métodos no aplicables</h4>
+                    <pre><code>// MAL: una sola interfaz con todo
+public interface RecursoCompleto {
+    boolean prestar();
+    void devolver();
+    String descargar();       // Revista no puede descargarse → método vacío
+    String getFormato();      // idem
+    void reproducir();        // Solo audiolibros → vacío en Libro y Revista
+}
+
+// Resultado: Revista.java queda así (BAD):
+public class Revista extends RecursoDigital implements RecursoCompleto {
+    @Override
+    public String descargar() { return null; }  // ← forzado, no tiene sentido
+    @Override
+    public void reproducir() { }                // ← forzado, vacío
+}</code></pre>
+                </div>
+
+                <div class="success-box">
+                    <h4>✅ Aplicación correcta de ISP — Interfaces pequeñas por comportamiento</h4>
+                    <pre><code>// BIEN: interfaces segregadas
+public interface Prestable   { boolean prestar(); void devolver(); }
+public interface Descargable { String descargar(); String getFormato(); }
+public interface Reproducible { void reproducir(); int getDuracion(); }
+
+// Libro implementa solo lo que puede hacer:
+public class Libro extends RecursoDigital implements Prestable, Descargable { ... }
+
+// Revista implementa solo préstamo:
+public class Revista extends RecursoDigital implements Prestable { ... }
+
+// Audiolibro puede prestarse, descargarse Y reproducirse:
+public class Audiolibro extends RecursoDigital
+        implements Prestable, Descargable, Reproducible { ... }</code></pre>
+                </div>
+                <p><strong>Justificación:</strong> Ninguna clase está forzada a implementar métodos que no le corresponden. El código es más limpio y las interfaces son reutilizables.</p>
+            </div>
+
+            <!-- DIP -->
+            <div class="step-card purple">
+                <h3><span class="solid-badge dip" style="font-size:1em; padding:6px 14px; border-radius:50%; margin-right:10px;">D</span> DIP — Dependency Inversion Principle</h3>
+                <p><strong>Los módulos de alto nivel no deben depender de módulos de bajo nivel. Ambos deben depender de abstracciones.</strong></p>
+
+                <div class="danger-box">
+                    <h4>❌ Violación de DIP — Dependencia directa de implementación concreta</h4>
+                    <pre><code>// MAL: GestorPrestamos depende directamente de ServicioEmailNotificacion
+public class GestorPrestamos {
+    private ServicioEmailNotificacion emailService;  // implementación concreta
+
+    public GestorPrestamos() {
+        this.emailService = new ServicioEmailNotificacion(); // acoplamiento fuerte
+    }
+    // Si quiero cambiar a SMS, tengo que modificar GestorPrestamos
+}</code></pre>
+                </div>
+
+                <div class="success-box">
+                    <h4>✅ Aplicación correcta de DIP — Depender de la abstracción</h4>
+                    <pre><code>// Abstracción (interfaz)
+public interface Notificable {
+    void enviarNotificacion(Usuario usuario, String mensaje, String tipo);
+}
+
+// Implementaciones concretas
+public class ServicioEmailNotificacion implements Notificable {
+    @Override
+    public void enviarNotificacion(Usuario u, String msg, String tipo) {
+        System.out.println("[EMAIL] Para: " + u.getEmail() +
+                           " | Tipo: " + tipo + " | Msg: " + msg);
+    }
+}
+
+public class ServicioConsolaNotificacion implements Notificable {
+    @Override
+    public void enviarNotificacion(Usuario u, String msg, String tipo) {
+        System.out.println("[CONSOLA] Usuario: " + u.getNombre() +
+                           " → " + tipo + ": " + msg);
+    }
+}
+
+// GestorPrestamos depende de la abstracción, no de una concreción
+public class GestorPrestamos {
+    private Notificable servicioNotificacion;  // abstracción
+
+    // Inyección de dependencia por constructor
+    public GestorPrestamos(Notificable servicioNotificacion) {
+        this.servicioNotificacion = servicioNotificacion;
+    }
+
+    public Prestamo realizarPrestamo(Usuario usuario, RecursoDigital recurso) {
+        Prestable prestable = (Prestable) recurso;
+        boolean ok = prestable.prestar();
+        if (ok) {
+            Prestamo p = new Prestamo(1, "2026-05-01", "2026-05-15",
+                                      "ACTIVO", usuario, recurso);
+            servicioNotificacion.enviarNotificacion(usuario,
+                "Préstamo de '" + recurso.getTitulo() + "' exitoso.",
+                "PRESTAMO");
+            return p;
+        }
+        return null;
+    }
+}</code></pre>
+                </div>
+                <p><strong>Justificación:</strong> En <code>Main</code> podemos elegir qué implementación de <code>Notificable</code> inyectar. Cambiar de email a consola no requiere modificar <code>GestorPrestamos</code>.</p>
+            </div>
+
+            <div class="info-box">
+                <h4>📌 Resumen: ¿Cómo demuestro SOLID en el README?</h4>
+                <p>Para cada principio, el README debe incluir:</p>
+                <ol>
+                    <li><strong>Nombre del principio</strong> y explicación en 1-2 oraciones</li>
+                    <li><strong>¿Dónde se aplica?</strong> — nombre de la clase/interfaz en tu proyecto</li>
+                    <li><strong>Fragmento de código</strong> real de tu implementación</li>
+                    <li><strong>Justificación</strong>: ¿qué problema evita esta decisión de diseño?</li>
+                </ol>
+            </div>
+        </section>
+
+        <hr class="divider-thick">
+
+        <!-- ==================== PASO 4: CLASES DE SERVICIO ==================== -->
+        <section id="paso4">
+            <div class="step-card teal">
+                <h3><span class="step-number">4</span> Crear las Clases de Servicio (Lógica de Negocio)</h3>
+
+                <p>Las clases de servicio implementan la <strong>lógica de negocio</strong> del sistema. Aplican el principio <span class="solid-badge srp">SRP</span>: cada servicio se encarga de una sola área funcional.</p>
+
+                <div class="info-box">
+                    <h4>📌 ¿Dónde creo los servicios?</h4>
+                    <p>Crea un paquete <code>com.biblioteca.service</code>. Cada clase de servicio va en su propio archivo dentro de ese paquete.</p>
+                </div>
+
+                <h4>Estructura actualizada del proyecto</h4>
+                <div class="folder-tree">
+                    <span class="folder">📁 biblioteca-digital-grupo-1/</span><br>
+                    ├── <span class="file-md">📄 README.md</span><br>
+                    ├── <span class="folder">📁 diagrams/</span><br>
+                    │&nbsp;&nbsp;&nbsp;└── <span class="file-img">🖼️ diagrama-clases.png</span><br>
+                    └── <span class="folder">📁 src/</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;└── <span class="folder">📁 com/</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── <span class="folder">📁 biblioteca/</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── <span class="folder">📁 interfaces/</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── <span class="file-java">☕ Prestable.java</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── <span class="file-java">☕ Descargable.java</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└── <span class="file-java">☕ Notificable.java</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── <span class="folder">📁 model/</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── <span class="file-java">☕ RecursoDigital.java</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── <span class="file-java">☕ Libro.java</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── <span class="file-java">☕ Revista.java</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── <span class="file-java">☕ Audiolibro.java</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── <span class="file-java">☕ Usuario.java</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── <span class="file-java">☕ Prestamo.java</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── <span class="file-java">☕ Reserva.java</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└── <span class="file-java">☕ Notificacion.java</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── <span class="folder">📁 service/</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── <span class="file-java">☕ GestorCatalogo.java</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── <span class="file-java">☕ GestorPrestamos.java</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── <span class="file-java">☕ GestorReservas.java</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└── <span class="file-java">☕ ServicioNotificacion.java</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── <span class="file-java">☕ Main.java</span>
+                </div>
+
+                <h4>Ejemplo: GestorCatalogo.java</h4>
+                <pre><code>package com.biblioteca.service;
+
+import com.biblioteca.model.RecursoDigital;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Gestiona el catálogo de recursos de la biblioteca.
+ * SRP: única responsabilidad → administrar el inventario de recursos.
+ * OCP: funciona con cualquier subclase de RecursoDigital presente o futura.
+ */
+public class GestorCatalogo {
+
+    private List&lt;RecursoDigital&gt; catalogo;
+
+    public GestorCatalogo() {
+        this.catalogo = new ArrayList&lt;&gt;();
+    }
+
+    public void agregarRecurso(RecursoDigital recurso) {
+        catalogo.add(recurso);
+        System.out.println("Recurso agregado: " + recurso.getTitulo());
+    }
+
+    public void mostrarCatalogo() {
+        System.out.println("\n══ CATÁLOGO DE LA BIBLIOTECA ══");
+        if (catalogo.isEmpty()) {
+            System.out.println("El catálogo está vacío.");
+            return;
+        }
+        for (RecursoDigital r : catalogo) {
+            System.out.println(" • " + r.mostrarInformacion()); // Polimorfismo
+        }
+    }
+
+    public List&lt;RecursoDigital&gt; buscarPorTitulo(String titulo) {
+        List&lt;RecursoDigital&gt; resultados = new ArrayList&lt;&gt;();
+        for (RecursoDigital r : catalogo) {
+            if (r.getTitulo().toLowerCase().contains(titulo.toLowerCase())) {
+                resultados.add(r);
+            }
+        }
+        return resultados;
+    }
+
+    public List&lt;RecursoDigital&gt; listarDisponibles() {
+        List&lt;RecursoDigital&gt; disponibles = new ArrayList&lt;&gt;();
+        for (RecursoDigital r : catalogo) {
+            if (r.isDisponible()) disponibles.add(r);
+        }
+        return disponibles;
+    }
+
+    public List&lt;RecursoDigital&gt; getCatalogo() {
+        return catalogo;
+    }
+}</code></pre>
+
+                <h4>Ejemplo: GestorPrestamos.java</h4>
+                <pre><code>package com.biblioteca.service;
+
+import com.biblioteca.interfaces.Notificable;
+import com.biblioteca.interfaces.Prestable;
+import com.biblioteca.model.Prestamo;
+import com.biblioteca.model.RecursoDigital;
+import com.biblioteca.model.Usuario;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Gestiona los préstamos de recursos a usuarios.
+ * SRP: única responsabilidad → ciclo de vida de préstamos.
+ * DIP: depende de la abstracción Notificable, no de una implementación concreta.
+ */
+public class GestorPrestamos {
+
+    private List&lt;Prestamo&gt; prestamos;
+    private Notificable servicioNotificacion;
+    private int contadorId;
+
+    public GestorPrestamos(Notificable servicioNotificacion) {
+        this.prestamos             = new ArrayList&lt;&gt;();
+        this.servicioNotificacion  = servicioNotificacion;
+        this.contadorId            = 1;
+    }
+
+    public Prestamo realizarPrestamo(Usuario usuario, RecursoDigital recurso,
+                                     String fechaDevolucion) {
+        if (!(recurso instanceof Prestable)) {
+            System.out.println("El recurso '" + recurso.getTitulo() + "' no es prestable.");
+            return null;
+        }
+        Prestable prestable = (Prestable) recurso;
+        boolean exitoso = prestable.prestar();
+        if (exitoso) {
+            Prestamo p = new Prestamo(
+                contadorId++, obtenerFechaHoy(), fechaDevolucion,
+                "ACTIVO", usuario, recurso
+            );
+            prestamos.add(p);
+            servicioNotificacion.enviarNotificacion(
+                usuario,
+                "Préstamo de '" + recurso.getTitulo() + "'. Devolver antes de: " + fechaDevolucion,
+                "PRESTAMO"
+            );
+            return p;
+        }
+        return null;
+    }
+
+    public void registrarDevolucion(Prestamo prestamo) {
+        if (!"ACTIVO".equals(prestamo.getEstado())) {
+            System.out.println("El préstamo ya fue cerrado.");
+            return;
+        }
+        Prestable prestable = (Prestable) prestamo.getRecurso();
+        prestable.devolver();
+        prestamo.setEstado("DEVUELTO");
+        prestamo.setFechaDevolucion(obtenerFechaHoy());
+        servicioNotificacion.enviarNotificacion(
+            prestamo.getUsuario(),
+            "Devolución de '" + prestamo.getRecurso().getTitulo() + "' registrada.",
+            "DEVOLUCION"
+        );
+        System.out.println("Devolución registrada para préstamo #" + prestamo.getId());
+    }
+
+    public void mostrarPrestamoActivos() {
+        System.out.println("\n══ PRÉSTAMOS ACTIVOS ══");
+        boolean hayActivos = false;
+        for (Prestamo p : prestamos) {
+            if ("ACTIVO".equals(p.getEstado())) {
+                System.out.println(" • " + p);
+                hayActivos = true;
+            }
+        }
+        if (!hayActivos) System.out.println("No hay préstamos activos.");
+    }
+
+    public List&lt;Prestamo&gt; getPrestamos() { return prestamos; }
+
+    private String obtenerFechaHoy() {
+        return java.time.LocalDate.now().toString();
+    }
+}</code></pre>
+
+                <h4>Ejemplo: ServicioNotificacion.java (implementación de Notificable)</h4>
+                <pre><code>package com.biblioteca.service;
+
+import com.biblioteca.interfaces.Notificable;
+import com.biblioteca.model.Notificacion;
+import com.biblioteca.model.Usuario;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Implementación concreta del servicio de notificaciones.
+ * DIP: implementa la abstracción Notificable, por lo tanto
+ * puede ser sustituida por cualquier otra implementación
+ * (email, SMS, push, etc.) sin cambiar GestorPrestamos.
+ */
+public class ServicioNotificacion implements Notificable {
+
+    private List&lt;Notificacion&gt; historialNotificaciones;
+    private int contadorId;
+
+    public ServicioNotificacion() {
+        this.historialNotificaciones = new ArrayList&lt;&gt;();
+        this.contadorId = 1;
+    }
+
+    @Override
+    public void enviarNotificacion(Usuario usuario, String mensaje, String tipo) {
+        String fecha = java.time.LocalDate.now().toString();
+        Notificacion notif = new Notificacion(contadorId++, mensaje, fecha, tipo, usuario);
+        historialNotificaciones.add(notif);
+        System.out.println("[NOTIFICACION → " + usuario.getNombre() + "] " +
+                           tipo + ": " + mensaje);
+    }
+
+    public void mostrarHistorial() {
+        System.out.println("\n══ HISTORIAL DE NOTIFICACIONES ══");
+        for (Notificacion n : historialNotificaciones) {
+            System.out.println(" • " + n);
+        }
+    }
+
+    public List&lt;Notificacion&gt; getHistorial() {
+        return historialNotificaciones;
+    }
+}</code></pre>
+
+                <div class="success-box">
+                    <h4>✅ Resultado del Paso 4</h4>
+                    <p>Tienes al menos <strong>2 clases de servicio</strong> con lógica de negocio real. Los servicios usan polimorfismo (trabajan con <code>RecursoDigital</code> abstracto), están desacoplados mediante interfaces (<code>Notificable</code>) y tienen una única responsabilidad cada uno.</p>
+                </div>
+            </div>
+        </section>
+
+        <hr class="divider-thick">
+
+        <!-- ==================== PASO 5: MAIN ==================== -->
+        <section id="paso5">
+            <div class="step-card green">
+                <h3><span class="step-number">5</span> Implementar la Clase Main Funcional</h3>
+
+                <p>El <code>Main</code> es el punto de entrada que demuestra que el sistema funciona. Debe mostrar: <strong>creación de objetos</strong>, <strong>polimorfismo</strong>, <strong>lógica de negocio</strong> y <strong>SOLID en acción</strong>.</p>
+
+                <h4>Ejemplo: Main.java completo</h4>
+                <pre><code>package com.biblioteca;
+
+import com.biblioteca.interfaces.Descargable;
+import com.biblioteca.interfaces.Notificable;
+import com.biblioteca.model.*;
+import com.biblioteca.service.*;
+
+public class Main {
+
+    public static void main(String[] args) {
+        System.out.println("╔══════════════════════════════════════╗");
+        System.out.println("║  SISTEMA DE GESTIÓN BIBLIOTECA       ║");
+        System.out.println("║  Entrega 2 — Principios SOLID        ║");
+        System.out.println("╚══════════════════════════════════════╝\n");
+
+        // ── 1. Crear servicio de notificación (DIP: inyectamos abstracción) ──
+        Notificable notificaciones = new ServicioNotificacion();
+
+        // ── 2. Crear gestores de servicio (SRP: cada gestor = 1 responsabilidad) ──
+        GestorCatalogo catalogo     = new GestorCatalogo();
+        GestorPrestamos prestamos   = new GestorPrestamos(notificaciones);
+        GestorReservas  reservas    = new GestorReservas(notificaciones);
+
+        // ── 3. Crear usuarios ────────────────────────────────────────────────
+        Usuario usuario1 = new Usuario(1, "Ana García",     "ana@corhuila.edu.co",    "ESTUDIANTE");
+        Usuario usuario2 = new Usuario(2, "Carlos López",   "carlos@corhuila.edu.co", "DOCENTE");
+
+        // ── 4. Crear recursos (OCP/LSP: todos son RecursoDigital) ────────────
+        Libro       libro1 = new Libro(1, "Clean Code", 2008,
+                                       "978-0132350884", "Robert C. Martin",
+                                       431, "Tecnología", "PDF");
+        Revista     rev1   = new Revista(2, "Sistemas & Software", 2024,
+                                         15, "Mensual", "ACM Press");
+        Audiolibro  audio1 = new Audiolibro(3, "The Pragmatic Programmer", 2019,
+                                             540, "Anna Smith", "MP3");
+        Libro       libro2 = new Libro(4, "Design Patterns", 1994,
+                                       "978-0201633610", "Gang of Four",
+                                       395, "Tecnología", "EPUB");
+
+        // ── 5. Agregar al catálogo ───────────────────────────────────────────
+        catalogo.agregarRecurso(libro1);
+        catalogo.agregarRecurso(rev1);
+        catalogo.agregarRecurso(audio1);
+        catalogo.agregarRecurso(libro2);
+
+        // ── 6. Mostrar catálogo (polimorfismo: cada recurso muestra su info) ─
+        catalogo.mostrarCatalogo();
+
+        // ── 7. Realizar préstamos ────────────────────────────────────────────
+        System.out.println("\n══ REALIZANDO PRÉSTAMOS ══");
+        Prestamo p1 = prestamos.realizarPrestamo(usuario1, libro1, "2026-05-30");
+        Prestamo p2 = prestamos.realizarPrestamo(usuario2, audio1, "2026-05-25");
+
+        // Intentar prestar un recurso ya prestado
+        prestamos.realizarPrestamo(usuario2, libro1, "2026-06-01");
+
+        // ── 8. Ver préstamos activos ─────────────────────────────────────────
+        prestamos.mostrarPrestamoActivos();
+
+        // ── 9. Registrar devolución ──────────────────────────────────────────
+        System.out.println("\n══ REGISTRANDO DEVOLUCIÓN ══");
+        if (p1 != null) prestamos.registrarDevolucion(p1);
+
+        // ── 10. Demostrar Descargable (ISP) ──────────────────────────────────
+        System.out.println("\n══ RECURSOS DESCARGABLES ══");
+        for (RecursoDigital r : catalogo.getCatalogo()) {
+            if (r instanceof Descargable) {
+                Descargable d = (Descargable) r;
+                System.out.println(r.getTitulo() + " → " + d.descargar());
+            }
+        }
+
+        // ── 11. Buscar en catálogo ───────────────────────────────────────────
+        System.out.println("\n══ BÚSQUEDA: 'code' ══");
+        catalogo.buscarPorTitulo("code")
+                .forEach(r -> System.out.println(" • " + r.getTitulo()));
+
+        // ── 12. Historial de notificaciones ─────────────────────────────────
+        ((ServicioNotificacion) notificaciones).mostrarHistorial();
+
+        System.out.println("\n╔══════════════════════════════════════╗");
+        System.out.println("║  Demostración completada con éxito   ║");
+        System.out.println("╚══════════════════════════════════════╝");
+    }
+}</code></pre>
+
+                <div class="info-box">
+                    <h4>📌 ¿Qué debe demostrar el Main?</h4>
+                    <ul>
+                        <li><strong>Herencia:</strong> crear objetos de las subclases y asignarlos a la clase abstracta</li>
+                        <li><strong>Polimorfismo:</strong> llamar a métodos que se comportan diferente según el tipo real</li>
+                        <li><strong>Interfaces:</strong> mostrar que objetos de distintas clases implementan el mismo contrato</li>
+                        <li><strong>DIP:</strong> inyectar la abstracción (<code>Notificable</code>) al crear los gestores</li>
+                        <li><strong>Lógica de negocio:</strong> el flujo completo (crear → prestar → devolver)</li>
+                    </ul>
+                </div>
+
+                <div class="success-box">
+                    <h4>✅ Resultado del Paso 5</h4>
+                    <p>El <code>Main</code> compila y ejecuta sin errores. Al correrlo, se ve en consola el flujo completo del sistema con polimorfismo, préstamos, notificaciones y búsquedas.</p>
+                </div>
+            </div>
+        </section>
+
+        <hr class="divider-thick">
+
+        <!-- ==================== PASO 6: README FINAL ==================== -->
+        <section id="paso6">
+            <div class="step-card highlight">
+                <h3><span class="step-number">6</span> Completar el README.md con la Sección SOLID</h3>
+
+                <p>Actualiza el README de la Entrega 1 agregando la sección obligatoria <strong>"Aplicación de Principios SOLID"</strong> y las conclusiones.</p>
+
+                <h4>Estructura del README.md Final</h4>
+                <pre><code># 📚 Sistema de Gestión de Biblioteca Digital
+
+## 📖 Descripción del Sistema
+(mismo texto de la Entrega 1)
+
+## 👥 Integrantes
+(misma tabla de la Entrega 1)
+
+## 📊 Diagrama de Clases UML
+![Diagrama de Clases](diagrams/diagrama-clases.png)
+
+## 🏗️ Estructura del Proyecto
+```
+src/
+└── com/
+    └── biblioteca/
+        ├── interfaces/
+        │   ├── Prestable.java
+        │   ├── Descargable.java
+        │   └── Notificable.java
+        ├── model/
+        │   ├── RecursoDigital.java  (Clase abstracta)
+        │   ├── Libro.java
+        │   ├── Revista.java
+        │   ├── Audiolibro.java
+        │   ├── Usuario.java
+        │   ├── Prestamo.java
+        │   ├── Reserva.java
+        │   └── Notificacion.java
+        ├── service/
+        │   ├── GestorCatalogo.java
+        │   ├── GestorPrestamos.java
+        │   ├── GestorReservas.java
+        │   └── ServicioNotificacion.java
+        └── Main.java
+```
+
+## 🔗 Explicación de Relaciones
+(mismo texto de la Entrega 1)
+
+## ⚙️ Aplicación de Principios SOLID
+
+### 🔴 S — Single Responsibility Principle
+**¿Dónde se aplica?** Paquete `service`: cada clase tiene una única responsabilidad.
+- `GestorCatalogo`: administra el inventario
+- `GestorPrestamos`: gestiona el ciclo de préstamos
+- `ServicioNotificacion`: envía notificaciones
+
+**Código:**
+```java
+// GestorPrestamos solo gestiona préstamos.
+// Si la lógica de notificaciones cambia, solo se modifica ServicioNotificacion.
+public class GestorPrestamos {
+    private Notificable servicioNotificacion; // abstracción, no implementación
+    public Prestamo realizarPrestamo(Usuario u, RecursoDigital r, String fecha) { ... }
+    public void registrarDevolucion(Prestamo p) { ... }
+}
+```
+
+### 🟠 O — Open/Closed Principle
+**¿Dónde se aplica?** `RecursoDigital` y sus subclases.
+El sistema puede extenderse con nuevos tipos de recurso (Podcast, Ebook)
+**sin modificar** `GestorCatalogo` ni `GestorPrestamos`.
+
+**Código:**
+```java
+// Nueva extensión sin modificar código existente:
+public class Podcast extends RecursoDigital implements Prestable {
+    @Override
+    public String mostrarInformacion() { return "[PODCAST] " + titulo; }
+    @Override
+    public boolean prestar() { ... }
+    @Override
+    public void devolver() { ... }
+}
+```
+
+### 🟡 L — Liskov Substitution Principle
+**¿Dónde se aplica?** `GestorPrestamos.realizarPrestamo()`.
+Libro, Revista y Audiolibro son intercambiables como `RecursoDigital`.
+
+**Código:**
+```java
+// funciona para Libro, Revista o Audiolibro → LSP
+public Prestamo realizarPrestamo(Usuario u, RecursoDigital recurso, String fecha) {
+    Prestable prestable = (Prestable) recurso;
+    prestable.prestar(); // comportamiento correcto en cualquier subclase
+}
+```
+
+### 🟢 I — Interface Segregation Principle
+**¿Dónde se aplica?** Paquete `interfaces`: tres interfaces específicas.
+- `Prestable`: solo para recursos que se prestan
+- `Descargable`: solo para recursos con descarga digital
+- `Notificable`: solo para servicios de notificación
+
+**Código:**
+```java
+public class Revista extends RecursoDigital implements Prestable {
+    // NO implementa Descargable porque las revistas no se descargan
+}
+```
+
+### 🔵 D — Dependency Inversion Principle
+**¿Dónde se aplica?** `GestorPrestamos` depende de `Notificable` (abstracción).
+
+**Código:**
+```java
+// Constructor recibe la abstracción → fácil cambiar implementación
+public GestorPrestamos(Notificable servicioNotificacion) {
+    this.servicioNotificacion = servicioNotificacion;
+}
+// En Main se inyecta la implementación concreta:
+Notificable notif = new ServicioNotificacion();
+GestorPrestamos gp = new GestorPrestamos(notif);
+```
+
+## 📝 Clases Implementadas
+(tabla actualizada incluyendo interfaces y servicios)
+
+## 🎯 Conclusiones
+- La aplicación del principio SRP facilitó la comprensión del código porque...
+- El principio OCP nos permitió agregar [tipo de recurso] sin modificar...
+- La principal dificultad fue [describir el reto] y la solucionamos...
+- Los principios SOLID se complementan entre sí: DIP depende de ISP porque...
+
+---
+*Proyecto de Programación y Diseño Orientado a Objetos — Corhuila 2026*</code></pre>
+
+                <div class="reflection-box">
+                    <h4>💡 Tips para las Conclusiones</h4>
+                    <ul>
+                        <li>Las conclusiones deben ser <strong>reflexivas</strong>, no solo descriptivas. Di qué aprendiste, no qué hiciste.</li>
+                        <li>Relaciona cada dificultad con la solución que encontraste</li>
+                        <li>Comenta por qué un principio fue más fácil o difícil de aplicar en tu proyecto específico</li>
+                        <li>Mínimo <strong>4 párrafos o puntos</strong> de conclusión</li>
+                    </ul>
+                </div>
+
+                <div class="success-box">
+                    <h4>✅ Resultado del Paso 6</h4>
+                    <p>El README.md final incluye la sección <strong>"Aplicación de Principios SOLID"</strong> con los 5 principios, código real de tu proyecto, justificación y conclusiones reflexivas.</p>
+                </div>
+            </div>
+        </section>
+
+        <hr class="divider-thick">
+
+        <!-- ==================== PASO 7: GITHUB ==================== -->
+        <section id="paso7">
+            <div class="step-card green">
+                <h3><span class="step-number">7</span> Actualizar el Repositorio en GitHub</h3>
+
+                <p>Sube todos los cambios de la Entrega 2 al mismo repositorio de la Entrega 1. Usa commits descriptivos que reflejen el progreso.</p>
+
+                <h4>Commits recomendados para la Entrega 2</h4>
+                <div class="table-responsive">
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>Orden</th>
+                                <th>Mensaje del Commit</th>
+                                <th>Qué incluye</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>7</td>
+                                <td><code>feat: agregar interfaces Prestable, Descargable y Notificable</code></td>
+                                <td>Paquete <code>interfaces</code> con los 3 archivos</td>
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                                <td><code>feat: actualizar modelos con implementación de interfaces</code></td>
+                                <td>Libro, Revista, Audiolibro actualizados</td>
+                            </tr>
+                            <tr>
+                                <td>9</td>
+                                <td><code>feat: implementar GestorCatalogo con polimorfismo</code></td>
+                                <td><code>GestorCatalogo.java</code></td>
+                            </tr>
+                            <tr>
+                                <td>10</td>
+                                <td><code>feat: implementar GestorPrestamos con DIP y lógica de negocio</code></td>
+                                <td><code>GestorPrestamos.java</code></td>
+                            </tr>
+                            <tr>
+                                <td>11</td>
+                                <td><code>feat: implementar ServicioNotificacion y GestorReservas</code></td>
+                                <td>Servicios restantes</td>
+                            </tr>
+                            <tr>
+                                <td>12</td>
+                                <td><code>feat: implementar Main funcional con demostración completa</code></td>
+                                <td><code>Main.java</code></td>
+                            </tr>
+                            <tr>
+                                <td>13</td>
+                                <td><code>docs: completar README con sección SOLID y conclusiones</code></td>
+                                <td>README.md final</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h4>Comandos para actualizar GitHub</h4>
+                <pre><code># Ubícate en tu proyecto
+cd biblioteca-digital-grupo-1
+
+# Ver qué archivos cambiaron
+git status
+
+# Agregar todos los cambios
+git add .
+
+# Commit con mensaje descriptivo
+git commit -m "feat: agregar interfaces Prestable, Descargable y Notificable"
+
+# Subir a GitHub
+git push origin main
+
+# (Repite para cada commit del proceso de desarrollo)</code></pre>
+
+                <div class="danger-box">
+                    <h4>🚨 Errores comunes en la Entrega 2</h4>
+                    <ul>
+                        <li>Subir todo en un solo commit de "entrega final" → muestra que no trabajaron progresivamente</li>
+                        <li>README sin la sección SOLID o con código copiado de internet (no de su proyecto)</li>
+                        <li>Clases de servicio sin lógica real (solo métodos vacíos o con <code>System.out.println("TODO")</code>)</li>
+                        <li>Main que no compila o que no demuestra polimorfismo</li>
+                        <li>Interfaces implementadas pero con cuerpos vacíos en los métodos</li>
+                        <li>No actualizar el README con la estructura nueva de paquetes</li>
+                    </ul>
+                </div>
+
+                <div class="success-box">
+                    <h4>✅ Resultado del Paso 7</h4>
+                    <p>El repositorio en GitHub tiene <strong>commits descriptivos</strong> desde la Entrega 1 hasta la Entrega 2, el código compila, el Main corre correctamente, y el README tiene toda la documentación técnica completa.</p>
+                </div>
+            </div>
+        </section>
+
+        <hr class="divider-thick">
+
+        <!-- ==================== CHECKLIST FINAL ==================== -->
+        <section id="checklist">
+            <h2>Checklist Final — ¿Está Lista mi Entrega 2?</h2>
+
+            <p>Antes de la fecha límite (15 de Mayo de 2026), verifica cada uno de estos puntos:</p>
+
+            <h3>🏗️ Interfaces</h3>
+            <ul class="checklist">
+                <li>☐ Hay al menos <strong>2 interfaces</strong> definidas en el paquete <code>interfaces</code></li>
+                <li>☐ Cada interfaz tiene una <strong>responsabilidad específica</strong> (ISP)</li>
+                <li>☐ Las interfaces están implementadas por las clases que realmente pueden cumplir ese contrato</li>
+                <li>☐ No hay implementaciones con el cuerpo del método vacío o con <code>throw new UnsupportedOperationException()</code></li>
+            </ul>
+
+            <h3>🔗 Herencia y Polimorfismo</h3>
+            <ul class="checklist">
+                <li>☐ El método abstracto <code>mostrarInformacion()</code> está implementado en <strong>todas las subclases</strong></li>
+                <li>☐ Las subclases usan <code>super()</code> en el constructor</li>
+                <li>☐ Se usa polimorfismo: hay código que trabaja con la clase abstracta como tipo de referencia</li>
+                <li>☐ Se demuestra el polimorfismo en un bucle (ej: <code>for RecursoDigital r : lista</code>)</li>
+            </ul>
+
+            <h3>⚙️ Principios SOLID</h3>
+            <ul class="checklist">
+                <li>☐ <strong>SRP:</strong> Las clases de servicio tienen una sola responsabilidad cada una</li>
+                <li>☐ <strong>OCP:</strong> Es posible agregar un nuevo tipo sin modificar código existente</li>
+                <li>☐ <strong>LSP:</strong> Las subclases pueden sustituir a la clase padre en cualquier contexto</li>
+                <li>☐ <strong>ISP:</strong> Las interfaces son pequeñas y específicas, no hay métodos forzados vacíos</li>
+                <li>☐ <strong>DIP:</strong> Al menos un servicio recibe su dependencia mediante inyección de constructor</li>
+            </ul>
+
+            <h3>💻 Clases de Servicio</h3>
+            <ul class="checklist">
+                <li>☐ Hay al menos <strong>2 clases de servicio</strong> con lógica de negocio real</li>
+                <li>☐ Los servicios usan las interfaces (no dependen de clases concretas directamente)</li>
+                <li>☐ La lógica cubre el flujo principal del sistema (ej: crear, listar, prestar, devolver)</li>
+            </ul>
+
+            <h3>🚀 Clase Main</h3>
+            <ul class="checklist">
+                <li>☐ El <code>Main</code> <strong>compila y corre</strong> sin errores</li>
+                <li>☐ Se crean objetos de al menos <strong>3 clases concretas diferentes</strong></li>
+                <li>☐ Se demuestra <strong>polimorfismo</strong> (lista de objetos del tipo abstracto)</li>
+                <li>☐ Se demuestra el uso de <strong>interfaces</strong></li>
+                <li>☐ Se ejecutan las operaciones principales del sistema con salida visible en consola</li>
+                <li>☐ Se usa inyección de dependencias al instanciar los servicios (DIP)</li>
+            </ul>
+
+            <h3>📝 README.md Final</h3>
+            <ul class="checklist">
+                <li>☐ Tiene la sección <strong>"Aplicación de Principios SOLID"</strong> con los 5 principios</li>
+                <li>☐ Cada principio tiene <strong>código real</strong> del proyecto (no genérico)</li>
+                <li>☐ Cada principio tiene <strong>justificación</strong> de por qué se tomó esa decisión</li>
+                <li>☐ La estructura del proyecto está <strong>actualizada</strong> con los paquetes nuevos</li>
+                <li>☐ Hay una sección de <strong>Conclusiones</strong> con al menos 4 puntos reflexivos</li>
+            </ul>
+
+            <h3>🐙 GitHub</h3>
+            <ul class="checklist">
+                <li>☐ El repositorio sigue siendo <strong>público</strong></li>
+                <li>☐ Hay commits <strong>desde la Entrega 1 hasta la Entrega 2</strong> mostrando progreso</li>
+                <li>☐ Los mensajes de commit son <strong>descriptivos</strong> (no "cambios", "fix", "asdf")</li>
+                <li>☐ Ambos integrantes tienen <strong>commits</strong> en el repositorio</li>
+            </ul>
+
+            <div class="info-box">
+                <h4>📌 Recuerda las Fechas de la Entrega 2</h4>
+                <ul>
+                    <li><strong>📅 Entrega en GitHub:</strong> 15 de Mayo de 2026</li>
+                    <li><strong>🎤 Sustentación oral:</strong> 19 de Mayo de 2026</li>
+                </ul>
+            </div>
+        </section>
+
+        <hr class="divider-thick">
+
+        <!-- ==================== RESUMEN TRADUCCIÓN SOLID → CÓDIGO ==================== -->
+        <section id="resumen-solid">
+            <h2>Resumen: Hoja de Referencia Rápida SOLID → Java</h2>
+
+            <div class="table-responsive">
+                <table class="styled-table">
+                    <thead>
+                        <tr>
+                            <th>Principio</th>
+                            <th>Pregunta clave</th>
+                            <th>Señal de que lo estás aplicando</th>
+                            <th>Señal de que lo estás violando</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="solid-badge srp">SRP</span></td>
+                            <td>¿Cuántas razones tiene esta clase para cambiar?</td>
+                            <td>Cada clase de servicio tiene métodos de un solo tema</td>
+                            <td>Una clase tiene métodos de email, base de datos Y lógica de negocio</td>
+                        </tr>
+                        <tr>
+                            <td><span class="solid-badge ocp">OCP</span></td>
+                            <td>¿Necesito modificar código existente para agregar un nuevo tipo?</td>
+                            <td>Nuevo tipo = nueva clase que hereda/implementa. Nada más.</td>
+                            <td>Hay <code>if (x instanceof TipoA) ... else if (instanceof TipoB)</code></td>
+                        </tr>
+                        <tr>
+                            <td><span class="solid-badge lsp">LSP</span></td>
+                            <td>¿Las subclases cumplen el contrato del padre?</td>
+                            <td>Todos los métodos overrideados hacen lo que se espera</td>
+                            <td>Métodos que lanzan excepciones o retornan null inesperadamente</td>
+                        </tr>
+                        <tr>
+                            <td><span class="solid-badge isp">ISP</span></td>
+                            <td>¿Alguna clase implementa métodos que no le corresponden?</td>
+                            <td>Interfaces pequeñas, cada clase implementa las que puede</td>
+                            <td>Métodos con cuerpo vacío o <code>throw new UnsupportedOperationException()</code></td>
+                        </tr>
+                        <tr>
+                            <td><span class="solid-badge dip">DIP</span></td>
+                            <td>¿Los servicios de alto nivel instancian directamente los de bajo nivel?</td>
+                            <td><code>private Notificable servicio</code> + inyección por constructor</td>
+                            <td><code>private ServicioEmail email = new ServicioEmail()</code> dentro del servicio</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="success-box">
+                <h4>✅ ¡Entrega 2 completada!</h4>
+                <p>Siguiendo estos 7 pasos, tu proyecto demuestra un diseño orientado a objetos sólido con herencia funcional, polimorfismo, interfaces bien definidas y los cinco principios SOLID aplicados y justificados.</p>
+                <p>📎 Consulta también: <a href="../../02-week/02-session/guia-paso-a-paso-entrega1.html">Guía Entrega 1</a> | <a href="../../02-week/02-session/proyecto-diagramacion-clases-solid.html">Proyecto — Diagramación y SOLID</a></p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <h3>Guía Paso a Paso — Entrega 2: SOLID, Interfaces y Lógica de Negocio</h3>
+            <p><strong>Creado por:</strong> Ing. Julian Quimbayo Castro</p>
+            <p>Última actualización: Abril 2026</p>
+            <p>Este material es de uso educativo y está diseñado para estudiantes de Ingeniería de Sistemas.</p>
+            <p style="margin-top: 20px; font-size: 0.9em; opacity: 0.9;">© Corporación Universitaria del Huila — Corhuila</p>
+        </div>
+    </footer>
+
+    <button id="scrollTopBtn" title="Volver arriba">↑</button>
+
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    setupScrollButton();
+    setupNavigation();
+    setupSmoothScroll();
+    highlightActiveSection();
+});
+
+function setupScrollButton() {
+    const scrollBtn = document.getElementById('scrollTopBtn');
+    window.addEventListener('scroll', function() {
+        if (document.documentElement.scrollTop > 300 || document.body.scrollTop > 300) {
+            scrollBtn.style.display = 'block';
+        } else {
+            scrollBtn.style.display = 'none';
+        }
+    });
+    scrollBtn.addEventListener('click', function() {
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+    });
+}
+
+function setupSmoothScroll() {
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    });
+}
+
+function setupNavigation() {
+    window.addEventListener('scroll', highlightActiveSection);
+}
+
+function highlightActiveSection() {
+    const navLinks = document.querySelectorAll('.main-nav a');
+    let current = '';
+    document.querySelectorAll('section').forEach(section => {
+        const sectionTop = section.offsetTop;
+        if (pageYOffset >= sectionTop - 200) {
+            current = section.getAttribute('id');
+        }
+    });
+    navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === `#${current}`) {
+            link.classList.add('active');
+        }
+    });
+}
+
+document.querySelectorAll('pre').forEach(pre => {
+    const button = document.createElement('button');
+    button.textContent = '📋 Copiar';
+    button.style.cssText = `
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        padding: 8px 12px;
+        background-color: #27ae60;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 12px;
+        opacity: 0;
+        transition: opacity 0.3s;
+        z-index: 10;
+    `;
+    pre.style.position = 'relative';
+    pre.appendChild(button);
+    pre.addEventListener('mouseenter', () => { button.style.opacity = '1'; });
+    pre.addEventListener('mouseleave', () => { button.style.opacity = '0'; });
+    button.addEventListener('click', () => {
+        const code = pre.innerText;
+        navigator.clipboard.writeText(code).then(() => {
+            button.textContent = '✅ Copiado';
+            setTimeout(() => { button.textContent = '📋 Copiar'; }, 2000);
+        });
+    });
+});
+    </script>
+</body>
+</html>

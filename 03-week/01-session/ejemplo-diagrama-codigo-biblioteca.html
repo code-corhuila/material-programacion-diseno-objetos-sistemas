@@ -1,0 +1,1386 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejemplo: Diagrama de Clases + Código Java — Biblioteca Digital | Ingeniería de Sistemas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+    --primary-color: #1e3c72;
+    --secondary-color: #2a5298;
+    --accent-color: #ff6b6b;
+    --light-bg: #f8f9fa;
+    --dark-text: #2c3e50;
+    --border-color: #e0e0e0;
+    --success-color: #27ae60;
+    --warning-color: #f39c12;
+    --info-color: #3498db;
+}
+
+body { font-family: 'Roboto', sans-serif; line-height: 1.6; color: var(--dark-text); background-color: #fff; }
+
+.main-header { background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%); color: white; padding: 0; }
+.top-bar { background-color: rgba(0,0,0,0.1); padding: 20px 0; text-align: center; }
+.brand-container { display: flex; flex-direction: column; align-items: center; }
+.brand-name { font-size: 18px; font-weight: 500; letter-spacing: 1px; margin: 5px 0; }
+
+.main-nav { background-color: rgba(0,0,0,0.2); padding: 15px 0; position: sticky; top: 0; z-index: 100; }
+.main-nav ul { list-style: none; display: flex; justify-content: center; flex-wrap: wrap; }
+.main-nav a { color: white; text-decoration: none; padding: 12px 18px; display: block; font-size: 14px; font-weight: 500; transition: background-color 0.3s; border-bottom: 3px solid transparent; }
+.main-nav a:hover, .main-nav a.active { background-color: rgba(255,255,255,0.1); border-bottom-color: var(--accent-color); }
+
+.container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+.main-content { padding: 30px 0 60px; }
+
+h1 { font-size: 2.2em; color: var(--primary-color); margin-bottom: 15px; }
+h2 { font-size: 1.7em; color: var(--primary-color); margin: 40px 0 20px; border-left: 5px solid var(--accent-color); padding-left: 15px; }
+h3 { font-size: 1.3em; color: var(--secondary-color); margin: 25px 0 12px; }
+h4 { font-size: 1.1em; color: var(--dark-text); margin: 15px 0 8px; }
+p { margin-bottom: 12px; }
+
+.hero-section { background: linear-gradient(135deg, #f8f9fa 0%, #e8f4f8 100%); border-radius: 12px; padding: 40px; margin: 30px 0; border-left: 6px solid var(--secondary-color); }
+.hero-section .lead { font-size: 1.1em; color: #555; }
+
+.divider { border: none; border-top: 1px solid var(--border-color); margin: 30px 0; }
+.divider-thick { border: none; border-top: 3px solid var(--border-color); margin: 40px 0; }
+
+/* Info boxes */
+.info-box { background-color: #e8f4f8; border-left: 4px solid var(--info-color); padding: 18px 20px; border-radius: 5px; margin: 20px 0; }
+.info-box h4 { color: var(--info-color); margin-top: 0; }
+.success-box { background-color: #eafaf1; border-left: 4px solid var(--success-color); padding: 18px 20px; border-radius: 5px; margin: 20px 0; }
+.success-box h4 { color: var(--success-color); margin-top: 0; }
+.warning-box { background-color: #fef9e7; border-left: 4px solid var(--warning-color); padding: 18px 20px; border-radius: 5px; margin: 20px 0; }
+.warning-box h4 { color: var(--warning-color); margin-top: 0; }
+.reflection-box { background-color: #fdf2f8; border-left: 4px solid #8e44ad; padding: 18px 20px; border-radius: 5px; margin: 20px 0; }
+.reflection-box h4 { color: #8e44ad; margin-top: 0; }
+
+/* Step cards */
+.step-card { background: white; border: 1px solid var(--border-color); border-radius: 10px; padding: 30px; margin: 25px 0; box-shadow: 0 2px 10px rgba(0,0,0,0.07); border-left: 6px solid var(--secondary-color); }
+.step-card.srp { border-left-color: #e74c3c; }
+.step-card.ocp { border-left-color: #e67e22; }
+.step-card.lsp { border-left-color: #f1c40f; }
+.step-card.isp { border-left-color: #2ecc71; }
+.step-card.dip { border-left-color: #3498db; }
+.step-header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
+.step-number { background: var(--secondary-color); color: white; width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.1em; flex-shrink: 0; }
+.step-number.srp { background: #e74c3c; }
+.step-number.ocp { background: #e67e22; }
+.step-number.lsp { background: #f1c40f; color: #333; }
+.step-number.isp { background: #2ecc71; }
+.step-number.dip { background: #3498db; }
+.step-title { font-size: 1.25em; font-weight: 700; color: var(--primary-color); }
+
+/* Code blocks */
+pre { background-color: #2d2d2d; color: #f8f8f2; padding: 20px; border-radius: 8px; overflow-x: auto; font-size: 0.88em; line-height: 1.6; margin: 15px 0; position: relative; }
+code { font-family: 'Courier New', monospace; }
+pre code { color: #f8f8f2; }
+.copy-btn { position: absolute; top: 10px; right: 10px; background: #555; color: white; border: none; padding: 5px 12px; border-radius: 4px; cursor: pointer; font-size: 0.8em; transition: background 0.3s; }
+.copy-btn:hover { background: var(--accent-color); }
+
+/* SOLID badges */
+.solid-badge { display: inline-block; padding: 3px 9px; border-radius: 4px; font-size: 0.78em; font-weight: 700; color: white; margin: 2px; }
+.badge-srp { background: #e74c3c; }
+.badge-ocp { background: #e67e22; }
+.badge-lsp { background: #f1c40f; color: #333; }
+.badge-isp { background: #2ecc71; }
+.badge-dip { background: #3498db; }
+
+/* Diagram container */
+.diagram-container { background: white; border: 2px solid var(--border-color); border-radius: 12px; padding: 30px; margin: 25px 0; overflow-x: auto; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
+.diagram-container .mermaid { text-align: center; }
+
+/* File tree */
+.file-tree { background: #1e1e1e; color: #d4d4d4; padding: 20px 25px; border-radius: 8px; font-family: 'Courier New', monospace; font-size: 0.9em; line-height: 1.9; margin: 15px 0; white-space: pre; overflow-x: auto; }
+.file-tree .folder { color: #4fc1ff; }
+.file-tree .file-java { color: #dcdcaa; }
+.file-tree .file-md { color: #6a9955; }
+.file-tree .comment { color: #6a9955; }
+
+/* Table */
+.styled-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+.styled-table th { background: var(--primary-color); color: white; padding: 12px 15px; text-align: left; font-weight: 500; }
+.styled-table td { padding: 11px 15px; border-bottom: 1px solid var(--border-color); }
+.styled-table tr:nth-child(even) { background-color: var(--light-bg); }
+.styled-table tr:hover { background-color: #f0f4ff; }
+
+/* Classes grid */
+.classes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; margin: 20px 0; }
+.class-card { background: white; border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
+.class-card-header { padding: 10px 14px; font-weight: 700; font-size: 0.95em; color: white; }
+.class-card-header.abstracta { background: #8e44ad; }
+.class-card-header.concreta { background: var(--secondary-color); }
+.class-card-header.interfaz { background: #27ae60; }
+.class-card-header.servicio { background: #e67e22; }
+.class-card-body { padding: 12px 14px; font-size: 0.88em; line-height: 1.7; }
+.class-card-body span.attr { color: #555; }
+.class-card-body span.method { color: var(--secondary-color); font-weight: 500; }
+
+/* Checklist */
+.checklist { list-style: none; margin-left: 0; }
+.checklist li { padding: 8px 0; border-bottom: 1px solid #f0f0f0; display: flex; align-items: flex-start; gap: 10px; font-size: 0.97em; }
+.checklist li::before { content: '☐'; font-size: 1.2em; color: #aaa; flex-shrink: 0; }
+.checklist li.done::before { content: '✅'; }
+
+/* Footer */
+.main-footer { background: var(--primary-color); color: white; text-align: center; padding: 40px 0; margin-top: 50px; }
+.main-footer p { margin: 8px 0; font-size: 0.95em; }
+.main-footer a { color: #fff9e6; text-decoration: none; }
+
+#scrollTopBtn { display: none; position: fixed; bottom: 20px; right: 20px; background-color: var(--secondary-color); color: white; border: none; padding: 15px 20px; font-size: 18px; border-radius: 50%; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.2); z-index: 99; }
+#scrollTopBtn:hover { background-color: var(--accent-color); }
+
+ul, ol { margin: 12px 0; margin-left: 28px; }
+li { margin: 7px 0; }
+
+@media (max-width: 768px) {
+    h1 { font-size: 1.6em; }
+    h2 { font-size: 1.3em; }
+    .hero-section { padding: 25px 18px; }
+    .main-nav ul { flex-direction: column; }
+    .classes-grid { grid-template-columns: 1fr; }
+    pre { font-size: 0.8em; }
+}
+    </style>
+</head>
+<body>
+
+<header class="main-header">
+    <div class="top-bar">
+        <div class="container brand-container">
+            <img src="https://raw.githubusercontent.com/code-corhuila/material-mineria-datos/b3725d694125ab35294ddfe415a327bc1445d32c/01-week/01-session/LOGO%20CORHUILA%20BLANCO%20PNG%20(2).png" alt="Logo Corhuila" style="max-width: 110px; height: auto; margin-bottom: 14px;">
+            <h1 class="brand-name" style="color:white;">Ejemplo Completo — Diagrama de Clases y Código Java</h1>
+            <p style="color:white;">Sistema de Gestión de Biblioteca Digital · Grupo 1 · Programación y Diseño OO</p>
+        </div>
+    </div>
+    <nav class="main-nav">
+        <div class="container">
+            <ul>
+                <li><a href="#descripcion">Descripción</a></li>
+                <li><a href="#clases">Clases</a></li>
+                <li><a href="#diagrama">Diagrama UML</a></li>
+                <li><a href="#codigo">Código Java</a></li>
+                <li><a href="#solid">SOLID</a></li>
+                <li><a href="#checklist">Checklist</a></li>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+<main class="container main-content">
+
+    <!-- ===== DESCRIPCIÓN ===== -->
+    <section id="descripcion">
+        <div class="hero-section">
+            <h1>📚 Sistema de Gestión de Biblioteca Digital</h1>
+            <p class="lead">Este documento es un ejemplo de referencia para el proyecto. Muestra el diagrama de clases UML completo y la implementación en Java aplicando los cinco principios SOLID. El sistema gestiona recursos digitales (libros, revistas, audiolibros), préstamos, reservas y notificaciones.</p>
+        </div>
+
+        <div class="info-box">
+            <h4>📋 Requisitos cubiertos en este ejemplo</h4>
+            <ul>
+                <li>✔ Mínimo 6 clases (este ejemplo tiene <strong>10 clases + 3 interfaces</strong>)</li>
+                <li>✔ Al menos 3 tipos de relación: herencia, composición, asociación</li>
+                <li>✔ Multiplicidad indicada en las relaciones</li>
+                <li>✔ 1 clase abstracta (<code>RecursoDigital</code>) y 3 interfaces</li>
+                <li>✔ Los 5 principios SOLID aplicados y explicados</li>
+                <li>✔ Clase <code>Main</code> funcional</li>
+            </ul>
+        </div>
+    </section>
+
+    <hr class="divider-thick">
+
+    <!-- ===== MAPA DE CLASES ===== -->
+    <section id="clases">
+        <h2>1. Mapa de Clases del Sistema</h2>
+        <p>Antes de ver el diagrama, aquí está el inventario completo de clases e interfaces:</p>
+
+        <div class="classes-grid">
+            <div class="class-card">
+                <div class="class-card-header abstracta">RecursoDigital (abstracta)</div>
+                <div class="class-card-body">
+                    <span class="attr">- id: String</span><br>
+                    <span class="attr">- titulo: String</span><br>
+                    <span class="attr">- autor: String</span><br>
+                    <span class="attr">- anioPublicacion: int</span><br>
+                    <span class="attr">- disponible: boolean</span><br>
+                    <span class="method">+ mostrarInformacion()</span><br>
+                    <span class="method">+ getDescripcion(): String</span>
+                </div>
+            </div>
+            <div class="class-card">
+                <div class="class-card-header concreta">Libro</div>
+                <div class="class-card-body">
+                    <span class="attr">- isbn: String</span><br>
+                    <span class="attr">- numeroPaginas: int</span><br>
+                    <span class="attr">- genero: String</span><br>
+                    <span class="method">+ prestar(usuario)</span><br>
+                    <span class="method">+ devolver()</span><br>
+                    <span class="method">+ descargar(): String</span>
+                </div>
+            </div>
+            <div class="class-card">
+                <div class="class-card-header concreta">Revista</div>
+                <div class="class-card-body">
+                    <span class="attr">- numeroEdicion: int</span><br>
+                    <span class="attr">- categoria: String</span><br>
+                    <span class="method">+ prestar(usuario)</span><br>
+                    <span class="method">+ devolver()</span><br>
+                    <span class="method">+ descargar(): String</span>
+                </div>
+            </div>
+            <div class="class-card">
+                <div class="class-card-header concreta">Audiolibro</div>
+                <div class="class-card-body">
+                    <span class="attr">- duracionMinutos: int</span><br>
+                    <span class="attr">- narrador: String</span><br>
+                    <span class="method">+ prestar(usuario)</span><br>
+                    <span class="method">+ devolver()</span><br>
+                    <span class="method">+ reproducir(): String</span>
+                </div>
+            </div>
+            <div class="class-card">
+                <div class="class-card-header concreta">Usuario</div>
+                <div class="class-card-body">
+                    <span class="attr">- id: String</span><br>
+                    <span class="attr">- nombre: String</span><br>
+                    <span class="attr">- email: String</span><br>
+                    <span class="attr">- prestamos: List</span><br>
+                    <span class="method">+ agregarPrestamo()</span><br>
+                    <span class="method">+ getPrestamos()</span>
+                </div>
+            </div>
+            <div class="class-card">
+                <div class="class-card-header concreta">Prestamo</div>
+                <div class="class-card-body">
+                    <span class="attr">- id: String</span><br>
+                    <span class="attr">- fechaInicio: String</span><br>
+                    <span class="attr">- fechaVencimiento: String</span><br>
+                    <span class="attr">- activo: boolean</span><br>
+                    <span class="method">+ estaVencido(): boolean</span><br>
+                    <span class="method">+ finalizar()</span>
+                </div>
+            </div>
+            <div class="class-card">
+                <div class="class-card-header concreta">Reserva</div>
+                <div class="class-card-body">
+                    <span class="attr">- id: String</span><br>
+                    <span class="attr">- fechaReserva: String</span><br>
+                    <span class="attr">- estado: String</span><br>
+                    <span class="method">+ confirmar()</span><br>
+                    <span class="method">+ cancelar()</span>
+                </div>
+            </div>
+            <div class="class-card">
+                <div class="class-card-header servicio">GestorCatalogo</div>
+                <div class="class-card-body">
+                    <span class="attr">- recursos: List</span><br>
+                    <span class="method">+ agregarRecurso()</span><br>
+                    <span class="method">+ buscarPorTitulo()</span><br>
+                    <span class="method">+ listarDisponibles()</span>
+                </div>
+            </div>
+            <div class="class-card">
+                <div class="class-card-header servicio">GestorPrestamos</div>
+                <div class="class-card-body">
+                    <span class="attr">- prestamos: List</span><br>
+                    <span class="method">+ realizarPrestamo()</span><br>
+                    <span class="method">+ devolver()</span><br>
+                    <span class="method">+ getPorUsuario()</span>
+                </div>
+            </div>
+            <div class="class-card">
+                <div class="class-card-header interfaz">&lt;&lt;interface&gt;&gt; Prestable</div>
+                <div class="class-card-body">
+                    <span class="method">+ prestar(usuario)</span><br>
+                    <span class="method">+ devolver()</span>
+                </div>
+            </div>
+            <div class="class-card">
+                <div class="class-card-header interfaz">&lt;&lt;interface&gt;&gt; Descargable</div>
+                <div class="class-card-body">
+                    <span class="method">+ descargar(): String</span>
+                </div>
+            </div>
+            <div class="class-card">
+                <div class="class-card-header interfaz">&lt;&lt;interface&gt;&gt; Notificable</div>
+                <div class="class-card-body">
+                    <span class="method">+ enviarNotificacion(msg)</span>
+                </div>
+            </div>
+        </div>
+
+        <pre class="file-tree"><span class="comment"># Estructura de paquetes en Java</span>
+<span class="folder">src/</span>
+└── <span class="folder">com/biblioteca/</span>
+    ├── <span class="folder">modelo/</span>
+    │   ├── <span class="file-java">RecursoDigital.java</span>   <span class="comment">← clase abstracta</span>
+    │   ├── <span class="file-java">Libro.java</span>
+    │   ├── <span class="file-java">Revista.java</span>
+    │   ├── <span class="file-java">Audiolibro.java</span>
+    │   ├── <span class="file-java">Usuario.java</span>
+    │   ├── <span class="file-java">Prestamo.java</span>
+    │   └── <span class="file-java">Reserva.java</span>
+    ├── <span class="folder">interfaces/</span>
+    │   ├── <span class="file-java">Prestable.java</span>
+    │   ├── <span class="file-java">Descargable.java</span>
+    │   └── <span class="file-java">Notificable.java</span>
+    ├── <span class="folder">servicio/</span>
+    │   ├── <span class="file-java">GestorCatalogo.java</span>
+    │   └── <span class="file-java">GestorPrestamos.java</span>
+    └── <span class="file-java">Main.java</span></pre>
+    </section>
+
+    <hr class="divider-thick">
+
+    <!-- ===== DIAGRAMA UML ===== -->
+    <section id="diagrama">
+        <h2>2. Diagrama de Clases UML</h2>
+        <p>El siguiente diagrama muestra todas las relaciones del sistema: herencia, implementación de interfaces, asociación y composición.</p>
+
+        <div class="diagram-container">
+            <div class="mermaid">
+classDiagram
+    direction TB
+
+    class RecursoDigital {
+        &lt;&lt;abstract&gt;&gt;
+        - id: String
+        - titulo: String
+        - autor: String
+        - anioPublicacion: int
+        - disponible: boolean
+        + getId(): String
+        + getTitulo(): String
+        + isDisponible(): boolean
+        + setDisponible(b: boolean)
+        + mostrarInformacion()*
+        + getDescripcion()* String
+    }
+
+    class Libro {
+        - isbn: String
+        - numeroPaginas: int
+        - genero: String
+        + mostrarInformacion()
+        + getDescripcion(): String
+        + prestar(u: Usuario)
+        + devolver()
+        + descargar(): String
+    }
+
+    class Revista {
+        - numeroEdicion: int
+        - categoria: String
+        + mostrarInformacion()
+        + getDescripcion(): String
+        + prestar(u: Usuario)
+        + devolver()
+        + descargar(): String
+    }
+
+    class Audiolibro {
+        - duracionMinutos: int
+        - narrador: String
+        + mostrarInformacion()
+        + getDescripcion(): String
+        + prestar(u: Usuario)
+        + devolver()
+        + reproducir(): String
+    }
+
+    class Usuario {
+        - id: String
+        - nombre: String
+        - email: String
+        - prestamos: List~Prestamo~
+        + agregarPrestamo(p: Prestamo)
+        + getPrestamos(): List~Prestamo~
+        + getNombre(): String
+    }
+
+    class Prestamo {
+        - id: String
+        - recurso: RecursoDigital
+        - usuario: Usuario
+        - fechaInicio: String
+        - fechaVencimiento: String
+        - activo: boolean
+        + estaVencido(): boolean
+        + finalizar()
+        + isActivo(): boolean
+    }
+
+    class Reserva {
+        - id: String
+        - recurso: RecursoDigital
+        - usuario: Usuario
+        - fechaReserva: String
+        - estado: String
+        + confirmar()
+        + cancelar()
+        + getEstado(): String
+    }
+
+    class GestorCatalogo {
+        - recursos: List~RecursoDigital~
+        + agregarRecurso(r: RecursoDigital)
+        + buscarPorTitulo(t: String): RecursoDigital
+        + listarDisponibles(): List
+        + listarTodos(): List
+    }
+
+    class GestorPrestamos {
+        - prestamos: List~Prestamo~
+        + realizarPrestamo(r, u): Prestamo
+        + devolver(p: Prestamo)
+        + getPorUsuario(u): List
+    }
+
+    class Prestable {
+        &lt;&lt;interface&gt;&gt;
+        + prestar(u: Usuario)*
+        + devolver()*
+    }
+
+    class Descargable {
+        &lt;&lt;interface&gt;&gt;
+        + descargar()* String
+    }
+
+    class Notificable {
+        &lt;&lt;interface&gt;&gt;
+        + enviarNotificacion(msg: String)*
+    }
+
+    RecursoDigital <|-- Libro
+    RecursoDigital <|-- Revista
+    RecursoDigital <|-- Audiolibro
+
+    Prestable <|.. Libro
+    Prestable <|.. Revista
+    Prestable <|.. Audiolibro
+
+    Descargable <|.. Libro
+    Descargable <|.. Revista
+
+    Notificable <|.. Usuario
+
+    Prestamo --> RecursoDigital : recurso
+    Prestamo --> Usuario : usuario
+
+    Reserva --> RecursoDigital : recurso
+    Reserva --> Usuario : usuario
+
+    GestorCatalogo o-- RecursoDigital : gestiona 1..*
+    GestorPrestamos o-- Prestamo : registra 0..*
+    Usuario *-- Prestamo : tiene 0..*
+            </div>
+        </div>
+
+        <div class="success-box">
+            <h4>✅ Relaciones presentes en el diagrama</h4>
+            <table class="styled-table">
+                <thead>
+                    <tr><th>Relación</th><th>Entre</th><th>Tipo</th><th>Multiplicidad</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>Herencia</strong></td><td>RecursoDigital → Libro, Revista, Audiolibro</td><td>extends</td><td>1 padre : N hijos</td></tr>
+                    <tr><td><strong>Realización</strong></td><td>Prestable → Libro, Revista, Audiolibro</td><td>implements</td><td>N clases : 1 interfaz</td></tr>
+                    <tr><td><strong>Realización</strong></td><td>Descargable → Libro, Revista</td><td>implements</td><td>2 clases : 1 interfaz</td></tr>
+                    <tr><td><strong>Realización</strong></td><td>Notificable → Usuario</td><td>implements</td><td>1 clase : 1 interfaz</td></tr>
+                    <tr><td><strong>Asociación</strong></td><td>Prestamo → RecursoDigital, Usuario</td><td>→</td><td>N:1</td></tr>
+                    <tr><td><strong>Composición</strong></td><td>Usuario ◆── Prestamo</td><td>*--</td><td>1 usuario : 0..* préstamos</td></tr>
+                    <tr><td><strong>Agregación</strong></td><td>GestorCatalogo ◇── RecursoDigital</td><td>o--</td><td>1 gestor : 1..* recursos</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <hr class="divider-thick">
+
+    <!-- ===== CÓDIGO JAVA ===== -->
+    <section id="codigo">
+        <h2>3. Implementación en Java</h2>
+
+        <!-- INTERFACES -->
+        <div class="step-card isp">
+            <div class="step-header">
+                <div class="step-number isp">I</div>
+                <div class="step-title">Interfaces — paquete <code>com.biblioteca.interfaces</code></div>
+            </div>
+            <h4>Prestable.java</h4>
+            <pre><button class="copy-btn" onclick="copiarCodigo(this)">Copiar</button><code>package com.biblioteca.interfaces;
+
+import com.biblioteca.modelo.Usuario;
+
+// ISP: interfaz específica solo para préstamo/devolución
+public interface Prestable {
+    void prestar(Usuario usuario);
+    void devolver();
+}</code></pre>
+
+            <h4>Descargable.java</h4>
+            <pre><button class="copy-btn" onclick="copiarCodigo(this)">Copiar</button><code>package com.biblioteca.interfaces;
+
+// ISP: interfaz específica para descarga digital
+public interface Descargable {
+    String descargar();
+}</code></pre>
+
+            <h4>Notificable.java</h4>
+            <pre><button class="copy-btn" onclick="copiarCodigo(this)">Copiar</button><code>package com.biblioteca.interfaces;
+
+// ISP + DIP: abstracción para envío de notificaciones
+public interface Notificable {
+    void enviarNotificacion(String mensaje);
+}</code></pre>
+        </div>
+
+        <!-- CLASE ABSTRACTA -->
+        <div class="step-card">
+            <div class="step-header">
+                <div class="step-number">A</div>
+                <div class="step-title">Clase Abstracta — <code>RecursoDigital.java</code></div>
+            </div>
+            <pre><button class="copy-btn" onclick="copiarCodigo(this)">Copiar</button><code>package com.biblioteca.modelo;
+
+// OCP: clase base abierta para extensión (nuevos recursos)
+// SRP: solo representa un recurso digital con sus datos
+public abstract class RecursoDigital {
+
+    private String id;
+    private String titulo;
+    private String autor;
+    private int anioPublicacion;
+    private boolean disponible;
+
+    public RecursoDigital(String id, String titulo, String autor, int anioPublicacion) {
+        this.id = id;
+        this.titulo = titulo;
+        this.autor = autor;
+        this.anioPublicacion = anioPublicacion;
+        this.disponible = true;
+    }
+
+    // Métodos abstractos que cada subclase debe implementar (OCP + LSP)
+    public abstract void mostrarInformacion();
+    public abstract String getDescripcion();
+
+    // Getters y setters
+    public String getId()                     { return id; }
+    public String getTitulo()                 { return titulo; }
+    public String getAutor()                  { return autor; }
+    public int    getAnioPublicacion()        { return anioPublicacion; }
+    public boolean isDisponible()             { return disponible; }
+    public void setDisponible(boolean disp)   { this.disponible = disp; }
+}</code></pre>
+        </div>
+
+        <!-- LIBRO -->
+        <div class="step-card">
+            <div class="step-header">
+                <div class="step-number">1</div>
+                <div class="step-title">Subclase <code>Libro.java</code></div>
+            </div>
+            <pre><button class="copy-btn" onclick="copiarCodigo(this)">Copiar</button><code>package com.biblioteca.modelo;
+
+import com.biblioteca.interfaces.Prestable;
+import com.biblioteca.interfaces.Descargable;
+
+// LSP: Libro puede sustituir a RecursoDigital sin romper el contrato
+// ISP: implementa solo las interfaces que necesita
+public class Libro extends RecursoDigital implements Prestable, Descargable {
+
+    private String isbn;
+    private int numeroPaginas;
+    private String genero;
+
+    public Libro(String id, String titulo, String autor, int anio,
+                 String isbn, int paginas, String genero) {
+        super(id, titulo, autor, anio);
+        this.isbn = isbn;
+        this.numeroPaginas = paginas;
+        this.genero = genero;
+    }
+
+    @Override
+    public void mostrarInformacion() {
+        System.out.println("📖 LIBRO: " + getTitulo());
+        System.out.println("   Autor: " + getAutor() + " | Año: " + getAnioPublicacion());
+        System.out.println("   ISBN: " + isbn + " | Páginas: " + numeroPaginas + " | Género: " + genero);
+        System.out.println("   Disponible: " + (isDisponible() ? "Sí" : "No"));
+    }
+
+    @Override
+    public String getDescripcion() {
+        return "Libro '" + getTitulo() + "' de " + getAutor() + " (" + numeroPaginas + " pág.)";
+    }
+
+    @Override
+    public void prestar(Usuario usuario) {
+        if (!isDisponible()) {
+            System.out.println("⚠ El libro '" + getTitulo() + "' no está disponible.");
+            return;
+        }
+        setDisponible(false);
+        System.out.println("✅ Libro '" + getTitulo() + "' prestado a " + usuario.getNombre());
+    }
+
+    @Override
+    public void devolver() {
+        setDisponible(true);
+        System.out.println("✅ Libro '" + getTitulo() + "' devuelto al catálogo.");
+    }
+
+    @Override
+    public String descargar() {
+        return "⬇ Descargando libro '" + getTitulo() + "' en formato PDF...";
+    }
+
+    public String getIsbn()       { return isbn; }
+    public int getNumeroPaginas() { return numeroPaginas; }
+    public String getGenero()     { return genero; }
+}</code></pre>
+        </div>
+
+        <!-- REVISTA -->
+        <div class="step-card">
+            <div class="step-header">
+                <div class="step-number">2</div>
+                <div class="step-title">Subclase <code>Revista.java</code></div>
+            </div>
+            <pre><button class="copy-btn" onclick="copiarCodigo(this)">Copiar</button><code>package com.biblioteca.modelo;
+
+import com.biblioteca.interfaces.Prestable;
+import com.biblioteca.interfaces.Descargable;
+
+public class Revista extends RecursoDigital implements Prestable, Descargable {
+
+    private int numeroEdicion;
+    private String categoria;
+
+    public Revista(String id, String titulo, String autor, int anio,
+                   int numeroEdicion, String categoria) {
+        super(id, titulo, autor, anio);
+        this.numeroEdicion = numeroEdicion;
+        this.categoria = categoria;
+    }
+
+    @Override
+    public void mostrarInformacion() {
+        System.out.println("📰 REVISTA: " + getTitulo());
+        System.out.println("   Autor: " + getAutor() + " | Año: " + getAnioPublicacion());
+        System.out.println("   Edición: " + numeroEdicion + " | Categoría: " + categoria);
+        System.out.println("   Disponible: " + (isDisponible() ? "Sí" : "No"));
+    }
+
+    @Override
+    public String getDescripcion() {
+        return "Revista '" + getTitulo() + "' ed. " + numeroEdicion + " (" + categoria + ")";
+    }
+
+    @Override
+    public void prestar(Usuario usuario) {
+        if (!isDisponible()) {
+            System.out.println("⚠ La revista '" + getTitulo() + "' no está disponible.");
+            return;
+        }
+        setDisponible(false);
+        System.out.println("✅ Revista '" + getTitulo() + "' prestada a " + usuario.getNombre());
+    }
+
+    @Override
+    public void devolver() {
+        setDisponible(true);
+        System.out.println("✅ Revista '" + getTitulo() + "' devuelta al catálogo.");
+    }
+
+    @Override
+    public String descargar() {
+        return "⬇ Descargando revista '" + getTitulo() + "' en formato PDF...";
+    }
+
+    public int getNumeroEdicion() { return numeroEdicion; }
+    public String getCategoria()  { return categoria; }
+}</code></pre>
+        </div>
+
+        <!-- AUDIOLIBRO -->
+        <div class="step-card">
+            <div class="step-header">
+                <div class="step-number">3</div>
+                <div class="step-title">Subclase <code>Audiolibro.java</code></div>
+            </div>
+            <pre><button class="copy-btn" onclick="copiarCodigo(this)">Copiar</button><code>package com.biblioteca.modelo;
+
+import com.biblioteca.interfaces.Prestable;
+
+// ISP: Audiolibro NO implementa Descargable (se reproduce, no se descarga como PDF)
+public class Audiolibro extends RecursoDigital implements Prestable {
+
+    private int duracionMinutos;
+    private String narrador;
+
+    public Audiolibro(String id, String titulo, String autor, int anio,
+                      int duracionMinutos, String narrador) {
+        super(id, titulo, autor, anio);
+        this.duracionMinutos = duracionMinutos;
+        this.narrador = narrador;
+    }
+
+    @Override
+    public void mostrarInformacion() {
+        System.out.println("🎧 AUDIOLIBRO: " + getTitulo());
+        System.out.println("   Autor: " + getAutor() + " | Año: " + getAnioPublicacion());
+        System.out.println("   Duración: " + duracionMinutos + " min | Narrador: " + narrador);
+        System.out.println("   Disponible: " + (isDisponible() ? "Sí" : "No"));
+    }
+
+    @Override
+    public String getDescripcion() {
+        return "Audiolibro '" + getTitulo() + "' narrado por " + narrador + " (" + duracionMinutos + " min)";
+    }
+
+    @Override
+    public void prestar(Usuario usuario) {
+        if (!isDisponible()) {
+            System.out.println("⚠ El audiolibro '" + getTitulo() + "' no está disponible.");
+            return;
+        }
+        setDisponible(false);
+        System.out.println("✅ Audiolibro '" + getTitulo() + "' prestado a " + usuario.getNombre());
+    }
+
+    @Override
+    public void devolver() {
+        setDisponible(true);
+        System.out.println("✅ Audiolibro '" + getTitulo() + "' devuelto.");
+    }
+
+    public String reproducir() {
+        return "▶ Reproduciendo audiolibro '" + getTitulo() + "'...";
+    }
+
+    public int getDuracionMinutos() { return duracionMinutos; }
+    public String getNarrador()     { return narrador; }
+}</code></pre>
+        </div>
+
+        <!-- USUARIO -->
+        <div class="step-card">
+            <div class="step-header">
+                <div class="step-number">4</div>
+                <div class="step-title">Clase <code>Usuario.java</code></div>
+            </div>
+            <pre><button class="copy-btn" onclick="copiarCodigo(this)">Copiar</button><code>package com.biblioteca.modelo;
+
+import com.biblioteca.interfaces.Notificable;
+import java.util.ArrayList;
+import java.util.List;
+
+// SRP: solo gestiona datos del usuario y su lista de préstamos
+// Notificable: el usuario puede recibir notificaciones (DIP)
+public class Usuario implements Notificable {
+
+    private String id;
+    private String nombre;
+    private String email;
+    private List&lt;Prestamo&gt; prestamos;
+
+    public Usuario(String id, String nombre, String email) {
+        this.id = id;
+        this.nombre = nombre;
+        this.email = email;
+        this.prestamos = new ArrayList&lt;&gt;();
+    }
+
+    public void agregarPrestamo(Prestamo prestamo) {
+        prestamos.add(prestamo);
+    }
+
+    @Override
+    public void enviarNotificacion(String mensaje) {
+        System.out.println("📩 Notificación para " + nombre + " (" + email + "): " + mensaje);
+    }
+
+    public String getId()               { return id; }
+    public String getNombre()           { return nombre; }
+    public String getEmail()            { return email; }
+    public List&lt;Prestamo&gt; getPrestamos() { return prestamos; }
+}</code></pre>
+        </div>
+
+        <!-- PRESTAMO -->
+        <div class="step-card">
+            <div class="step-header">
+                <div class="step-number">5</div>
+                <div class="step-title">Clase <code>Prestamo.java</code></div>
+            </div>
+            <pre><button class="copy-btn" onclick="copiarCodigo(this)">Copiar</button><code>package com.biblioteca.modelo;
+
+// SRP: solo representa el registro de un préstamo
+public class Prestamo {
+
+    private String id;
+    private RecursoDigital recurso;
+    private Usuario usuario;
+    private String fechaInicio;
+    private String fechaVencimiento;
+    private boolean activo;
+
+    public Prestamo(String id, RecursoDigital recurso, Usuario usuario,
+                    String fechaInicio, String fechaVencimiento) {
+        this.id = id;
+        this.recurso = recurso;
+        this.usuario = usuario;
+        this.fechaInicio = fechaInicio;
+        this.fechaVencimiento = fechaVencimiento;
+        this.activo = true;
+    }
+
+    public void finalizar() {
+        this.activo = false;
+        System.out.println("📋 Préstamo " + id + " finalizado.");
+    }
+
+    public boolean estaVencido() {
+        // Lógica simplificada — en producción usar LocalDate
+        return false;
+    }
+
+    public String getId()              { return id; }
+    public RecursoDigital getRecurso() { return recurso; }
+    public Usuario getUsuario()        { return usuario; }
+    public String getFechaInicio()     { return fechaInicio; }
+    public String getFechaVencimiento(){ return fechaVencimiento; }
+    public boolean isActivo()          { return activo; }
+
+    @Override
+    public String toString() {
+        return "Préstamo[" + id + "] " + recurso.getTitulo() + " → " + usuario.getNombre()
+               + " | Hasta: " + fechaVencimiento + " | Activo: " + activo;
+    }
+}</code></pre>
+        </div>
+
+        <!-- GESTOR CATALOGO -->
+        <div class="step-card">
+            <div class="step-header">
+                <div class="step-number">6</div>
+                <div class="step-title">Servicio <code>GestorCatalogo.java</code></div>
+            </div>
+            <pre><button class="copy-btn" onclick="copiarCodigo(this)">Copiar</button><code>package com.biblioteca.servicio;
+
+import com.biblioteca.modelo.RecursoDigital;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+// SRP: solo gestiona el catálogo (agregar, buscar, listar)
+// DIP: trabaja con la abstracción RecursoDigital, no con clases concretas
+public class GestorCatalogo {
+
+    private List&lt;RecursoDigital&gt; recursos;
+
+    public GestorCatalogo() {
+        this.recursos = new ArrayList&lt;&gt;();
+    }
+
+    public void agregarRecurso(RecursoDigital recurso) {
+        recursos.add(recurso);
+        System.out.println("✅ Recurso agregado: " + recurso.getDescripcion());
+    }
+
+    public RecursoDigital buscarPorTitulo(String titulo) {
+        return recursos.stream()
+            .filter(r -> r.getTitulo().equalsIgnoreCase(titulo))
+            .findFirst()
+            .orElse(null);
+    }
+
+    public List&lt;RecursoDigital&gt; listarDisponibles() {
+        return recursos.stream()
+            .filter(RecursoDigital::isDisponible)
+            .collect(Collectors.toList());
+    }
+
+    public List&lt;RecursoDigital&gt; listarTodos() {
+        return recursos;
+    }
+
+    public void mostrarCatalogo() {
+        System.out.println("\n=== CATÁLOGO COMPLETO ===");
+        if (recursos.isEmpty()) {
+            System.out.println("El catálogo está vacío.");
+            return;
+        }
+        recursos.forEach(RecursoDigital::mostrarInformacion);
+        System.out.println("========================\n");
+    }
+}</code></pre>
+        </div>
+
+        <!-- GESTOR PRESTAMOS -->
+        <div class="step-card">
+            <div class="step-header">
+                <div class="step-number">7</div>
+                <div class="step-title">Servicio <code>GestorPrestamos.java</code></div>
+            </div>
+            <pre><button class="copy-btn" onclick="copiarCodigo(this)">Copiar</button><code>package com.biblioteca.servicio;
+
+import com.biblioteca.interfaces.Prestable;
+import com.biblioteca.interfaces.Notificable;
+import com.biblioteca.modelo.Prestamo;
+import com.biblioteca.modelo.RecursoDigital;
+import com.biblioteca.modelo.Usuario;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+// SRP: solo gestiona préstamos y devoluciones
+// DIP: usa Prestable y Notificable (abstracciones), no clases concretas
+public class GestorPrestamos {
+
+    private List&lt;Prestamo&gt; prestamos;
+    private int contadorId;
+
+    public GestorPrestamos() {
+        this.prestamos = new ArrayList&lt;&gt;();
+        this.contadorId = 1;
+    }
+
+    public Prestamo realizarPrestamo(RecursoDigital recurso, Usuario usuario) {
+        if (!(recurso instanceof Prestable)) {
+            System.out.println("⚠ El recurso no es prestable.");
+            return null;
+        }
+        if (!recurso.isDisponible()) {
+            System.out.println("⚠ El recurso '" + recurso.getTitulo() + "' no está disponible.");
+            return null;
+        }
+
+        Prestable prestable = (Prestable) recurso;
+        prestable.prestar(usuario);
+
+        String id = "P" + String.format("%03d", contadorId++);
+        Prestamo prestamo = new Prestamo(id, recurso, usuario, "2026-04-28", "2026-05-28");
+        prestamos.add(prestamo);
+        usuario.agregarPrestamo(prestamo);
+
+        // DIP: notificamos al usuario a través de la abstracción Notificable
+        if (usuario instanceof Notificable) {
+            ((Notificable) usuario).enviarNotificacion(
+                "Préstamo registrado: '" + recurso.getTitulo() + "'. Vence: 2026-05-28"
+            );
+        }
+
+        return prestamo;
+    }
+
+    public void devolverPrestamo(Prestamo prestamo) {
+        Prestable prestable = (Prestable) prestamo.getRecurso();
+        prestable.devolver();
+        prestamo.finalizar();
+
+        if (prestamo.getUsuario() instanceof Notificable) {
+            ((Notificable) prestamo.getUsuario()).enviarNotificacion(
+                "Devolución registrada: '" + prestamo.getRecurso().getTitulo() + "'. ¡Gracias!"
+            );
+        }
+    }
+
+    public List&lt;Prestamo&gt; getPorUsuario(Usuario usuario) {
+        return prestamos.stream()
+            .filter(p -> p.getUsuario().getId().equals(usuario.getId()))
+            .collect(Collectors.toList());
+    }
+
+    public void mostrarPrestamos() {
+        System.out.println("\n=== PRÉSTAMOS ACTIVOS ===");
+        prestamos.stream()
+            .filter(Prestamo::isActivo)
+            .forEach(System.out::println);
+        System.out.println("========================\n");
+    }
+}</code></pre>
+        </div>
+
+        <!-- MAIN -->
+        <div class="step-card">
+            <div class="step-header">
+                <div class="step-number">★</div>
+                <div class="step-title">Clase Principal <code>Main.java</code></div>
+            </div>
+            <pre><button class="copy-btn" onclick="copiarCodigo(this)">Copiar</button><code>package com.biblioteca;
+
+import com.biblioteca.interfaces.Descargable;
+import com.biblioteca.modelo.*;
+import com.biblioteca.servicio.GestorCatalogo;
+import com.biblioteca.servicio.GestorPrestamos;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        System.out.println("╔══════════════════════════════════════════╗");
+        System.out.println("║   SISTEMA DE GESTIÓN DE BIBLIOTECA       ║");
+        System.out.println("║   DIGITAL — Grupo 1 — Corhuila 2026      ║");
+        System.out.println("╚══════════════════════════════════════════╝\n");
+
+        // ── 1. Crear servicios (DIP: dependemos de abstracciones) ──────────
+        GestorCatalogo catalogo = new GestorCatalogo();
+        GestorPrestamos gestorPrestamos = new GestorPrestamos();
+
+        // ── 2. Crear recursos digitales ────────────────────────────────────
+        Libro libro1 = new Libro("L001", "El Quijote", "Cervantes", 1605,
+                                  "978-84-376-0494-7", 863, "Clásico");
+        Libro libro2 = new Libro("L002", "Clean Code", "Robert C. Martin", 2008,
+                                  "978-0-13-235088-4", 431, "Programación");
+        Revista revista1 = new Revista("R001", "IEEE Software", "IEEE", 2024, 12, "Tecnología");
+        Audiolibro audio1 = new Audiolibro("A001", "Sapiens", "Yuval Noah Harari", 2011,
+                                            840, "Mike Cooper");
+
+        // ── 3. Poblar catálogo (OCP: se agrega sin modificar GestorCatalogo) ─
+        catalogo.agregarRecurso(libro1);
+        catalogo.agregarRecurso(libro2);
+        catalogo.agregarRecurso(revista1);
+        catalogo.agregarRecurso(audio1);
+
+        // ── 4. Mostrar catálogo completo ───────────────────────────────────
+        catalogo.mostrarCatalogo();
+
+        // ── 5. Crear usuarios ──────────────────────────────────────────────
+        Usuario usuario1 = new Usuario("U001", "María García", "mgarcia@corhuila.edu.co");
+        Usuario usuario2 = new Usuario("U002", "Carlos López", "clopez@corhuila.edu.co");
+
+        // ── 6. Realizar préstamos (polimorfismo LSP) ───────────────────────
+        System.out.println("=== PRÉSTAMOS ===");
+        gestorPrestamos.realizarPrestamo(libro1, usuario1);
+        gestorPrestamos.realizarPrestamo(revista1, usuario2);
+        gestorPrestamos.realizarPrestamo(audio1, usuario1);
+        // Intento de préstamo cuando no está disponible:
+        gestorPrestamos.realizarPrestamo(libro1, usuario2);
+
+        // ── 7. Descargas (ISP: solo recursos Descargable) ─────────────────
+        System.out.println("\n=== DESCARGAS ===");
+        catalogo.listarTodos().forEach(r -> {
+            if (r instanceof Descargable) {
+                System.out.println(((Descargable) r).descargar());
+            }
+        });
+
+        // ── 8. Ver préstamos activos ───────────────────────────────────────
+        gestorPrestamos.mostrarPrestamos();
+
+        // ── 9. Devolver un recurso ─────────────────────────────────────────
+        System.out.println("=== DEVOLUCIÓN ===");
+        var prestamosUsuario1 = gestorPrestamos.getPorUsuario(usuario1);
+        if (!prestamosUsuario1.isEmpty()) {
+            gestorPrestamos.devolverPrestamo(prestamosUsuario1.get(0));
+        }
+
+        // ── 10. Estado final del catálogo ──────────────────────────────────
+        System.out.println("\n=== DISPONIBLES DESPUÉS DE DEVOLUCIÓN ===");
+        catalogo.listarDisponibles().forEach(r -> System.out.println("  ✔ " + r.getDescripcion()));
+
+        System.out.println("\n✅ Demostración completada.");
+    }
+}</code></pre>
+        </div>
+
+        <!-- SALIDA ESPERADA -->
+        <div class="warning-box">
+            <h4>💻 Salida esperada en consola</h4>
+            <pre style="background:#111; color: #00ff88; font-size:0.82em;"><code>╔══════════════════════════════════════════╗
+║   SISTEMA DE GESTIÓN DE BIBLIOTECA       ║
+║   DIGITAL — Grupo 1 — Corhuila 2026      ║
+╚══════════════════════════════════════════╝
+
+✅ Recurso agregado: Libro 'El Quijote' de Cervantes (863 pág.)
+✅ Recurso agregado: Libro 'Clean Code' de Robert C. Martin (431 pág.)
+✅ Recurso agregado: Revista 'IEEE Software' ed. 12 (Tecnología)
+✅ Recurso agregado: Audiolibro 'Sapiens' narrado por Mike Cooper (840 min)
+
+=== CATÁLOGO COMPLETO ===
+📖 LIBRO: El Quijote ...
+📖 LIBRO: Clean Code ...
+📰 REVISTA: IEEE Software ...
+🎧 AUDIOLIBRO: Sapiens ...
+
+=== PRÉSTAMOS ===
+✅ Libro 'El Quijote' prestado a María García
+📩 Notificación para María García: Préstamo registrado: 'El Quijote'. Vence: 2026-05-28
+✅ Revista 'IEEE Software' prestada a Carlos López
+📩 Notificación para Carlos López: Préstamo registrado: 'IEEE Software'. Vence: 2026-05-28
+✅ Audiolibro 'Sapiens' prestado a María García
+📩 Notificación para María García: Préstamo registrado: 'Sapiens'. Vence: 2026-05-28
+⚠ El recurso 'El Quijote' no está disponible.
+
+=== DESCARGAS ===
+⬇ Descargando libro 'El Quijote' en formato PDF...
+⬇ Descargando libro 'Clean Code' en formato PDF...
+⬇ Descargando revista 'IEEE Software' en formato PDF...
+
+=== PRÉSTAMOS ACTIVOS ===
+Préstamo[P001] El Quijote → María García | Hasta: 2026-05-28 | Activo: true
+...
+
+=== DEVOLUCIÓN ===
+✅ Libro 'El Quijote' devuelto al catálogo.
+📋 Préstamo P001 finalizado.
+📩 Notificación para María García: Devolución registrada: 'El Quijote'. ¡Gracias!</code></pre>
+        </div>
+    </section>
+
+    <hr class="divider-thick">
+
+    <!-- ===== SOLID ===== -->
+    <section id="solid">
+        <h2>4. Aplicación de Principios SOLID</h2>
+        <p>A continuación se documenta cómo cada principio se aplica en este sistema, relacionando el código con el diagrama UML.</p>
+
+        <!-- SRP -->
+        <div class="step-card srp">
+            <div class="step-header">
+                <div class="step-number srp">S</div>
+                <div class="step-title">SRP — Single Responsibility Principle <span class="solid-badge badge-srp">SRP</span></div>
+            </div>
+            <p><strong>Cada clase tiene una única razón para cambiar.</strong></p>
+            <table class="styled-table">
+                <thead><tr><th>Clase</th><th>Única responsabilidad</th></tr></thead>
+                <tbody>
+                    <tr><td><code>RecursoDigital</code></td><td>Representar los datos comunes de un recurso digital</td></tr>
+                    <tr><td><code>Prestamo</code></td><td>Registrar los datos de un préstamo individual</td></tr>
+                    <tr><td><code>GestorCatalogo</code></td><td>Administrar el catálogo: agregar, buscar, listar</td></tr>
+                    <tr><td><code>GestorPrestamos</code></td><td>Realizar y gestionar préstamos y devoluciones</td></tr>
+                    <tr><td><code>Usuario</code></td><td>Almacenar datos del usuario y sus préstamos</td></tr>
+                </tbody>
+            </table>
+            <div class="info-box">
+                <h4>Evidencia en el código</h4>
+                <p>La lógica de notificación NO está en <code>Prestamo</code> ni en <code>RecursoDigital</code>. Está delegada a la interfaz <code>Notificable</code> y ejecutada desde <code>GestorPrestamos</code>. Si cambia el canal de notificación, solo cambia <code>Usuario</code>.</p>
+            </div>
+        </div>
+
+        <!-- OCP -->
+        <div class="step-card ocp">
+            <div class="step-header">
+                <div class="step-number ocp">O</div>
+                <div class="step-title">OCP — Open/Closed Principle <span class="solid-badge badge-ocp">OCP</span></div>
+            </div>
+            <p><strong>El sistema está abierto a nuevos tipos de recursos sin modificar el código existente.</strong></p>
+            <pre><button class="copy-btn" onclick="copiarCodigo(this)">Copiar</button><code>// Para agregar un nuevo tipo de recurso (Podcast), solo se extiende:
+public class Podcast extends RecursoDigital implements Prestable {
+
+    private int episodios;
+
+    public Podcast(String id, String titulo, String autor, int anio, int episodios) {
+        super(id, titulo, autor, anio);
+        this.episodios = episodios;
+    }
+
+    @Override
+    public void mostrarInformacion() {
+        System.out.println("🎙 PODCAST: " + getTitulo() + " | Episodios: " + episodios);
+    }
+
+    @Override
+    public String getDescripcion() {
+        return "Podcast '" + getTitulo() + "' (" + episodios + " episodios)";
+    }
+
+    @Override
+    public void prestar(Usuario usuario) { setDisponible(false); }
+
+    @Override
+    public void devolver() { setDisponible(true); }
+}
+
+// GestorCatalogo NO necesita ningún cambio — trabaja con RecursoDigital
+catalogo.agregarRecurso(new Podcast("PC001", "Lex Fridman Podcast", "Lex Fridman", 2023, 400));</code></pre>
+        </div>
+
+        <!-- LSP -->
+        <div class="step-card lsp">
+            <div class="step-header">
+                <div class="step-number lsp">L</div>
+                <div class="step-title">LSP — Liskov Substitution Principle <span class="solid-badge badge-lsp">LSP</span></div>
+            </div>
+            <p><strong>Libro, Revista y Audiolibro pueden usarse en cualquier lugar donde se espere un <code>RecursoDigital</code>.</strong></p>
+            <pre><button class="copy-btn" onclick="copiarCodigo(this)">Copiar</button><code>// LSP: cualquier RecursoDigital puede mostrarse sin saber su tipo exacto
+List&lt;RecursoDigital&gt; recursos = catalogo.listarTodos();
+for (RecursoDigital r : recursos) {
+    r.mostrarInformacion(); // polimorfismo — funciona para Libro, Revista y Audiolibro
+}
+
+// La subclase respeta el contrato: si isDisponible() es true, prestar() lo cambia a false
+// Ninguna subclase lanza excepciones inesperadas ni viola el comportamiento de la superclase</code></pre>
+        </div>
+
+        <!-- ISP -->
+        <div class="step-card isp">
+            <div class="step-header">
+                <div class="step-number isp">I</div>
+                <div class="step-title">ISP — Interface Segregation Principle <span class="solid-badge badge-isp">ISP</span></div>
+            </div>
+            <p><strong>Las interfaces son pequeñas y específicas. Ninguna clase implementa métodos que no necesita.</strong></p>
+            <table class="styled-table">
+                <thead><tr><th>Clase</th><th>Prestable</th><th>Descargable</th><th>Notificable</th></tr></thead>
+                <tbody>
+                    <tr><td><code>Libro</code></td><td>✅</td><td>✅</td><td>—</td></tr>
+                    <tr><td><code>Revista</code></td><td>✅</td><td>✅</td><td>—</td></tr>
+                    <tr><td><code>Audiolibro</code></td><td>✅</td><td>❌ (no aplica)</td><td>—</td></tr>
+                    <tr><td><code>Usuario</code></td><td>—</td><td>—</td><td>✅</td></tr>
+                </tbody>
+            </table>
+            <div class="success-box">
+                <h4>✅ Correcto</h4>
+                <p><code>Audiolibro</code> NO implementa <code>Descargable</code> porque un audiolibro se reproduce, no se descarga en PDF. Si usáramos una sola interfaz grande, <code>Audiolibro</code> tendría que implementar un método que no tiene sentido para él.</p>
+            </div>
+        </div>
+
+        <!-- DIP -->
+        <div class="step-card dip">
+            <div class="step-header">
+                <div class="step-number dip">D</div>
+                <div class="step-title">DIP — Dependency Inversion Principle <span class="solid-badge badge-dip">DIP</span></div>
+            </div>
+            <p><strong><code>GestorPrestamos</code> depende de abstracciones (<code>Prestable</code>, <code>Notificable</code>), no de clases concretas.</strong></p>
+            <pre><button class="copy-btn" onclick="copiarCodigo(this)">Copiar</button><code>// ❌ MAL: depender de la clase concreta
+// void realizarPrestamo(Libro libro, Usuario usuario) { ... }  ← solo funciona con Libro
+
+// ✅ BIEN: depender de la abstracción
+public Prestamo realizarPrestamo(RecursoDigital recurso, Usuario usuario) {
+    if (!(recurso instanceof Prestable)) { return null; }
+    Prestable prestable = (Prestable) recurso; // trabaja con la interfaz
+    prestable.prestar(usuario);
+    // ...
+    if (usuario instanceof Notificable) {
+        ((Notificable) usuario).enviarNotificacion("Préstamo registrado...");
+    }
+    // El gestor no sabe si el recurso es Libro, Revista o Audiolibro
+    // No sabe si el usuario notifica por email, SMS o push notification
+}</code></pre>
+        </div>
+    </section>
+
+    <hr class="divider-thick">
+
+    <!-- ===== CHECKLIST ===== -->
+    <section id="checklist">
+        <h2>5. Checklist de Entrega</h2>
+        <p>Verifica que tu proyecto cumpla con todos los requisitos antes de subir a GitHub.</p>
+
+        <div class="step-card">
+            <h3>📊 Entregable 1 — Diagrama UML</h3>
+            <ul class="checklist">
+                <li>Mínimo 6 clases identificadas (con atributos, métodos y visibilidad)</li>
+                <li>Al menos 1 clase abstracta claramente marcada con <code>&lt;&lt;abstract&gt;&gt;</code></li>
+                <li>Al menos 2 interfaces marcadas con <code>&lt;&lt;interface&gt;&gt;</code></li>
+                <li>Al menos 3 tipos de relación distintos (herencia, composición, asociación, etc.)</li>
+                <li>Multiplicidad indicada en TODAS las relaciones (ej: 1, 0..*, 1..*)</li>
+                <li>Diagrama exportado como imagen (.png o .svg) en carpeta <code>/diagrams</code></li>
+                <li>Herramienta usada: draw.io / Lucidchart / StarUML</li>
+            </ul>
+        </div>
+
+        <div class="step-card">
+            <h3>💻 Entregable 2 — Código Java</h3>
+            <ul class="checklist">
+                <li>Código organizado en paquetes (<code>modelo</code>, <code>interfaces</code>, <code>servicio</code>)</li>
+                <li>Clase abstracta implementada con métodos abstractos</li>
+                <li>Subclases que extienden la clase abstracta e implementan interfaces</li>
+                <li>Al menos 3 interfaces implementadas</li>
+                <li>Polimorfismo demostrado en <code>Main.java</code></li>
+                <li>Los 5 principios SOLID aplicados en el código</li>
+                <li>Código compila sin errores</li>
+                <li><code>Main.java</code> ejecuta y muestra resultados en consola</li>
+            </ul>
+        </div>
+
+        <div class="step-card">
+            <h3>📝 Entregable 3 — Documentación (README.md)</h3>
+            <ul class="checklist">
+                <li>Nombre del sistema y descripción</li>
+                <li>Integrantes del grupo</li>
+                <li>Imagen del diagrama de clases incrustada en el README</li>
+                <li>Descripción de cada clase y su rol</li>
+                <li>Sección "Aplicación de Principios SOLID" con código de ejemplo para cada uno</li>
+                <li>Instrucciones para compilar y ejecutar el proyecto</li>
+                <li>Conclusiones y lecciones aprendidas</li>
+            </ul>
+        </div>
+
+        <div class="step-card">
+            <h3>🐙 GitHub</h3>
+            <ul class="checklist">
+                <li>Repositorio nombrado: <code>[nombre-proyecto]-grupo-[N]</code></li>
+                <li>Estructura de carpetas: <code>/src</code>, <code>/diagrams</code>, <code>README.md</code></li>
+                <li>Al menos 5 commits con mensajes descriptivos</li>
+                <li>Repositorio público y accesible</li>
+            </ul>
+        </div>
+
+        <div class="reflection-box">
+            <h4>💡 Recuerda para la sustentación (35% de la nota)</h4>
+            <ul>
+                <li>Ambos integrantes deben poder explicar <strong>todas</strong> las clases e interfaces del diagrama</li>
+                <li>Deben poder señalar en el código dónde se aplica cada principio SOLID</li>
+                <li>Deben saber por qué eligieron herencia vs. composición en cada relación</li>
+                <li>Deben poder responder: "¿Qué pasaría si quieres agregar un nuevo tipo de recurso?"</li>
+            </ul>
+        </div>
+    </section>
+
+</main>
+
+<footer class="main-footer">
+    <div class="container">
+        <p><strong>Programación y Diseño Orientado a Objetos</strong></p>
+        <p>Ingeniería de Sistemas · Corporación Universitaria del Huila — Corhuila</p>
+        <p>Semestre 2026 · Ejemplo de referencia — Grupo 1: Sistema de Biblioteca Digital</p>
+    </div>
+</footer>
+
+<button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+    // Inicializar Mermaid
+    mermaid.initialize({ startOnLoad: true, theme: 'default', flowchart: { useMaxWidth: true } });
+
+    // Scroll to top
+    window.addEventListener('scroll', () => {
+        document.getElementById('scrollTopBtn').style.display = window.scrollY > 300 ? 'block' : 'none';
+    });
+
+    // Navegación activa
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.main-nav a');
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                navLinks.forEach(a => a.classList.remove('active'));
+                const active = document.querySelector(`.main-nav a[href="#${entry.target.id}"]`);
+                if (active) active.classList.add('active');
+            }
+        });
+    }, { threshold: 0.3 });
+    sections.forEach(s => observer.observe(s));
+
+    // Copiar código
+    function copiarCodigo(btn) {
+        const pre = btn.parentElement;
+        const text = pre.innerText.replace('Copiar', '').trim();
+        navigator.clipboard.writeText(text).then(() => {
+            btn.textContent = '✓ Copiado';
+            setTimeout(() => btn.textContent = 'Copiar', 2000);
+        });
+    }
+</script>
+</body>
+</html>
